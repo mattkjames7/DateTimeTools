@@ -4,7 +4,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="TimeTools",
+    name="DateTimeTools",
     version="0.0.3",
     author="Matthew Knight James",
     author_email="mattkjames7@gmail.com",

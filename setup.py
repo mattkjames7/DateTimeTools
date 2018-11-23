@@ -11,7 +11,7 @@ setuptools.setup(
     description="A package containing some simple tools to manage dates and times.",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/mattkjames7/TimeTools",
+    url="https://github.com/mattkjames7/DateTimeTools",
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",

@@ -14,7 +14,7 @@ def CDFEpochToUT(DT):
 	
 	'''
 	#convert to strings if need be
-	if DT.dtype == '<M8[ns]':
+	if DT.dtype in ['datetime64[ms]','<M8[ns]']:
 		dt = DT.astype('U')
 	else:
 		dt = DT

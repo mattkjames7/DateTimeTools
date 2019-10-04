@@ -14,11 +14,13 @@ def DayNo(date):
 	year=np.int32(date/10000)
 	month=np.int32((date % 10000)/100)
 	day=date % 100
-	start_day=[  0, 31, 59, 90,120,151,181,212,243,273,304,334]
-	if LeapYear(year) and month > 2:
-		dayno=start_day[month-1]+day+1
-	else:
-		dayno=start_day[month-1]+day
+	start_day= np.array([  0, 31, 59, 90,120,151,181,212,243,273,304,334])
+	dayno = start_day[month-1] + day + np.int32(LeapYear(year) & (month > 2))
+	
+#	if LeapYear(year) and month > 2:
+#		dayno=start_day[month-1]+day+1
+#	else:
+#		dayno=start_day[month-1]+day
 	return dayno
 
 def DayNotoDate(year,doy):

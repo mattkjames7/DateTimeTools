@@ -21,5 +21,8 @@ setuptools.setup(
     install_requires=[
 		'numpy',
 		'scipy',
+		'DateTimeTools',
+		'kpindex',
+		'pyomnidata',
 	],
 )

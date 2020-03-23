@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="DateTimeTools",
-    version="0.0.5",
+    version="0.0.6",
     author="Matthew Knight James",
     author_email="mattkjames7@gmail.com",
     description="A package containing some simple tools to manage dates and times.",
@@ -21,7 +21,5 @@ setuptools.setup(
     install_requires=[
 		'numpy',
 		'scipy',
-		'kpindex',
-		'pyomnidata',
 	],
 )

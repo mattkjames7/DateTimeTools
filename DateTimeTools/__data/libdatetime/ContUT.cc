@@ -1,5 +1,9 @@
 #include "ContUT.h"
 
+double YearUTC[101];
+bool PopYearUTC = false;
+
+
 /***********************************************************************
  * NAME : 		void PopulateYearUTC()
  * 

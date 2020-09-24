@@ -7,11 +7,11 @@
 #include "WhereEq.h"
 #include "Unique.h"
 #include <math.h>
+
 #endif
 using namespace std;
 
-double YearUTC[101];
-bool PopYearUTC = false;
+
 
 
 

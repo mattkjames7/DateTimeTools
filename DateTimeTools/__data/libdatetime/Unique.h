@@ -1,4 +1,10 @@
-#include "Unique.h"
+#ifndef __UNIQUE_H__
+#define __UNIQUE_H__
+#include <stdio.h>
+#include <stdlib.h>
+
+#endif
+using namespace std;
 
 
 /***********************************************************************
@@ -16,29 +22,6 @@
  * 
  * ********************************************************************/
 template <typename T>
-void Unique(int n, T *x, int *nu, T *ux) {
-	
-	int i, p, pVal;
-	p = 0;
-	pVal = 0;
-	
-	/* sort the dates first */
-	T *sx = new T[n];
-	BubbleSort(n,x,sx);
-	
-	/* loop through sorted dates, adding a new one to the unique array
-	 * when a differnet on is found */
-	for (i=0;i<n;i++) {
-		if ((sx[i] != pVal) || (i == 0)) {
-			ux[p] = sx[i];
-			pVal = sx[i];
-			p++;
-		}
-	}
-	nu[0] = p;
-	
-	/* delete the sorted array */
-	delete sx;	
-		
-	
-}
+void Unique(int n, T *x, int *nu, T *ux);
+
+#include "Unique.cc"

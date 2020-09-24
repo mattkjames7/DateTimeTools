@@ -1,4 +1,4 @@
-#include "WhereEq.h"
+//#include "WhereEq.h"
 
 /***********************************************************************
  * NAME : 		void WhereEq(n,x,y,ni,ind)

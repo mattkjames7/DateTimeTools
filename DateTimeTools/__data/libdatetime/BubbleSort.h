@@ -1,29 +1,30 @@
-#ifndef __WHEREEQ_H__
-#define __WHEREEQ_H__
+#ifndef __BUBBLESORT_H__
+#define __BUBBLESORT_H__
 #include <stdio.h>
 #include <stdlib.h>
 
 #endif
 using namespace std;
 
-
 /***********************************************************************
- * NAME : 		void WhereEq(n,x,y,ni,ind)
+ * NAME : 		void BubbleSort(n,x,y)
  * 
- * DESCRIPTION : 	Scan through an arra, x, for instances where it is 
- * 					equal to y.
+ * DESCRIPTION : 	Uses the buble sort algorithm to sort an array. NOTE
+ * 					the datatype T is a tmeplate for all data types,
+ * 					so it should accept int, float, double etc.
  * 
  * INPUTS : 
  * 			int 	n			Number of elemenets
- * 			T		*x			Array to be scanned
- * 			T 		y			value to test
+ * 			T		x			Array to be sorted
  *
  * OUTPUTS :
- * 			int		*ni			Number of indices
- * 			int		*ind		Array of indices
+ * 			T		y			Sorted array
  * 
  * 
  * ********************************************************************/
 /* create a template for a data type so that we can accept any data type */
 template <typename T>
-void WhereEq(int n, T *x, T y, int *ni, int *ind);
+void BubbleSort(int n, T *x, T *y);
+
+
+#include "BubbleSort.cc"

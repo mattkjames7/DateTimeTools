@@ -1,19 +1,33 @@
 import numpy as np
+from ._CFunctions import _CWithinTimeRange
+from ._CTConv import _CTConv
 
-def WithinTimeRange(Timet,Time0,Time1):
+def WithinTimeRange(Timet,Time0,Time1,BoolOut=True):
 	'''
 	Performs a simple check on a test time (Timet) to see if it exists
 	between Time0 and time1.
 	
-	Inputs:
-		Timet: Test time - either a single floating point (array or 
+	Inputs
+	======
+	Timet : tuple | float 
+		Test time - either a single floating point (array or 
 		scalar) to denote hours of the day, or a tuple containing 
 		(Date,Time).
-		Time0: Start time, same format as above.
-		Time1: End time, same format as above.
+	Time0 :	tuple | float
+		Start time, same format as above.
+	Time1 : tuple | float
+		End time, same format as above.
+	BoolOut : boolean
+		True by default, returns a boolean array with the same size as 
+		Timet, where eath element in the range Time0 to Time1 is true.
+		When False, returns a list of indices within the time range.
 		
-	Output:
-		boolean (array or scalar), True if within time range.
+	Output
+	======
+	out : bool | int
+		If BoolOut == True boolean (array or scalar), True if within 
+		time range.
+		When BoolOut == False, an integer array of indices is returned.
 	'''
 	sh = np.shape(Timet)
 	s0 = np.size(Time0)
@@ -24,31 +38,45 @@ def WithinTimeRange(Timet,Time0,Time1):
 		T0 = Time0[1]
 	else:
 		T0 = Time0
-		D0 = 0
+		D0 = 20000101
 		
 	if s1 == 2:
 		D1 = Time1[0]
 		T1 = Time1[1]
 	else:
 		T1 = Time1
-		D1 = 0	
+		D1 = 20000101	
 	
 	if sh[0] == 2 and np.size(sh) == 2:
 		#hopefully this is a list of date and time
 		D = np.array([Timet[0]]).flatten()
 		T = np.array([Timet[1]]).flatten()
-		res = np.zeros(sh[1],dtype='bool')
-		if D0 == D1:
-			use = np.where((D == D0) & (T >= T0) & (T <= T1))[0]
-		else:
-			use = np.where(((D == D0) & (T >= T0)) | ((D == D1) & (T <= T1)) | ((D > D0) & (D < D1)))[0]
-		res[use] = True
+	else: 
+		T = np.array(Timet)
+		D = np.zeros(T.size,dtype='int32') + 20000101
 		
+	#convert the dtypes for compatibility with the C++ code
+	_n = _CTConv(np.size(D),'c_int')
+	_Date = _CTConv(D,'c_int_ptr')
+	_ut = _CTConv(T,'c_float_ptr')
+	_Date0 = _CTConv(D0,'c_int')
+	_ut0 = _CTConv(T0,'c_float')
+	_Date1 = _CTConv(D1,'c_int')
+	_ut1 = _CTConv(T1,'c_float')
+	_ni = np.zeros(1,dtype='int32')
+	_ind = np.zeros(_n,dtype='int32')
+		
+		
+	#call the C++ code
+	_CWithinTimeRange(_n,_Date,_ut,_date0,_ut0,_date1,_ut1,_ni,_ind)
+	
+	#reduce the side of the index array
+	_ind = _ind[:_ni[0]]
+	
+	#either return the indices or the boolean array
+	if BoolOut:
+		out = np.zeros(_n,dtype='bool8')
+		out[_ind] = True
+		return out
 	else:
-		#just time
-		T = np.array([Timet]).flatten()
-		res = np.zeros(sh[0],dtype='bool')
-		use = np.where((T >= T0) & (T <= T1))[0]
-		res[use] = True
-
-	return res
+		return _ind

@@ -177,7 +177,11 @@ void ContUTtoDate(int n, double *utc, int *Date, float *ut) {
 	double *utcr = new double[n];
 	for (i=0;i<n;i++) {
 		ut[i] = (float) fmod(utc[i],24.0);
+		if (utc[i] < 0) {
+			ut[i] += 24.0;
+		}
 		utcr[i] = utc[i] - (double) ut[i];
+
 	}
 	
 	/* find the unique values of utcr */

@@ -28,7 +28,9 @@ using namespace std;
  * 			int 	*ind		Array of indices
  * 
  * ********************************************************************/
-void WithinTimeRange(int n, int *Date, float *ut, 
+extern "C" {
+	void WithinTimeRange(int n, int *Date, float *ut, 
 						int Date0, float ut0,
 						int Date1, float ut1,
 						int *ni, int *ind);
+}

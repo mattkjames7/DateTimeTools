@@ -35,14 +35,14 @@ extern "C" {
  * 
  * INPUTS : 
  * 			int 	n		Number of elements
- * 			int		*hh		hours
- * 			int		*mm		minutes
- * 			int		*ss		seconds
+ * 			double	*hh		hours
+ * 			double		*mm		minutes
+ * 			double		*ss		seconds
  * 			double	*ms		milliseconds
  *
  * OUTPUTS :
  * 			double	*ut		Time array in decimal hours
  * 
  * ********************************************************************/
-	void HHMMtoDec(int n, int *hh, int *mm, int *ss, double *ms, double *ut);
+	void HHMMtoDec(int n, double *hh, double *mm, double *ss, double *ms, double *ut);
 }

@@ -63,7 +63,7 @@ double GetYearUTC(int Year) {
 		utcYear = YearUTC[Year - 1950];
 	} else if (Year < 1950) {
 		utcYear = YearUTC[0];
-		for (i=1949;i<=Year;i--) {
+		for (i=1949;i>=Year;i--) {
 			LeapYear(1,&i,&ly);
 			if (ly) {
 				nDays = 366;
@@ -108,6 +108,13 @@ double GetYearUTC(int Year) {
  * ********************************************************************/
 void ContUT(int n, int *Date, float *ut, double *utc) {
 	
+	/* copy the time across from ut to utc */
+	int i;
+	for (i=0;i<n;i++) {
+		utc[i] = ut[i];
+	}
+	
+	
 	/* Get list of unique dates */
 	int *uDate = new int[n];
 	int nud;
@@ -119,7 +126,7 @@ void ContUT(int n, int *Date, float *ut, double *utc) {
 	DayNo(nud,uDate,yrs,dns);
 	
 	/* loop through each unique date */
-	int i, j;
+	int j;
 	int *ind = new int[n];
 	int ni;
 	double utcDay, utcYear;

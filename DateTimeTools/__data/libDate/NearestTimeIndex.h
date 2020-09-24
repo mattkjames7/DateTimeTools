@@ -2,12 +2,13 @@
 #define __NEARESTTIMEINDEX_H__
 #include <stdio.h>
 #include <stdlib.h>
-
+#include "ContUT.h"
+#include <math.h>
 #endif
 using namespace std;
 
 /***********************************************************************
- * NAME : 		int NearestTimeIndex(n,Date,ut,TestDate,Testut,I)
+ * NAME : 		int NearestTimeIndex(n,Date,ut,TestDate,Testut)
  * 
  * DESCRIPTION : 	Locates the index of the closest time/date.
  * 
@@ -16,7 +17,7 @@ using namespace std;
  * 			int		*Date		Date array in the format yyyymmdd
  * 			float	*ut			UT array, in decimal hours
  * 			int		TestDate	The date we are looking for
- * 			flaot 	Testut		The time we are looking for
+ * 			float 	Testut		The time we are looking for
  *
  *
  * RETURNS :

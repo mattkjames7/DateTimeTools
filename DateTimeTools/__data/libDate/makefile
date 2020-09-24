@@ -11,3 +11,9 @@ o:
 	g++ -c DateDifference.cc
 	g++ -c TimeDifference.cc
 	g++ -c MidTime.cc
+	g++ -c WhereEq.cc
+	g++ -c BubbleSort.cc
+	g++ -c ContUT.cc
+	g++ -c Unique.cc
+	g++ -c NearestTimeIndex.cc
+	g++ -c WithinTimeRange.cc

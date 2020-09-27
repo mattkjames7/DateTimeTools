@@ -3,7 +3,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#endif
 using namespace std;
 
 
@@ -30,3 +29,4 @@ void WhereEq(int n, T *x, T y, int *ni, int *ind);
 
 
 #include "WhereEq.cc"
+#endif

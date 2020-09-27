@@ -26,7 +26,7 @@ def DectoHHMM(ut):
 
 	#convert the inputs into the exact dtypes required for C++
 	_n = _CTConv(np.size(ut),'c_int')
-	_ut = _CTConv(ut,'c_float_ptr')
+	_ut = _CTConv(ut,'c_double_ptr')
 	_hh = np.zeros(_n,dtype='int32')
 	_mm = np.zeros(_n,dtype='int32')
 	_ss = np.zeros(_n,dtype='int32')

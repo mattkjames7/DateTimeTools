@@ -175,13 +175,15 @@ void ContUTtoDate(int n, double *utc, int *Date, float *ut) {
 	/* Start by getting the ut (from 0 - 24) and the remaining utc */
 	int i, j;
 	double *utcr = new double[n];
+	double *utd = new double[n];
+	
 	for (i=0;i<n;i++) {
-		ut[i] = (float) fmod(utc[i],24.0);
+		utd[i] = fmod(utc[i],24.0);
 		if (utc[i] < 0) {
-			ut[i] += 24.0;
+			utd[i] += 24.0;
 		}
-		utcr[i] = utc[i] - (double) ut[i];
-
+		utcr[i] = utc[i] - utd[i];
+		ut[i] = (float) utd[i];
 	}
 	
 	/* find the unique values of utcr */
@@ -189,7 +191,7 @@ void ContUTtoDate(int n, double *utc, int *Date, float *ut) {
 	int nu;
 	Unique(n,utcr,&nu,uutcr);
 	
-	/* now loop thgouh each one */
+	/* now loop through each one */
 	int ni;
 	int *ind = new int[nu];
 	int yr, dn, dt;
@@ -218,7 +220,7 @@ void ContUTtoDate(int n, double *utc, int *Date, float *ut) {
 		}
 		
 		/* we know the year, now to find the number of days */
-		dn = (int) round((uutcr[i] - utcYear)/24.0) + 1;
+		dn = (int) round((uutcr[i] - utcYear)/24.0 + 1.0);
 		
 		/* work out the date integer */
 		DayNotoDate(1,&yr,&dn,&dt);
@@ -231,6 +233,7 @@ void ContUTtoDate(int n, double *utc, int *Date, float *ut) {
 	delete ind;
 	delete uutcr;
 	delete utcr;
+	delete utd;
 		
 	
 }

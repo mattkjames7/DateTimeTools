@@ -15,6 +15,9 @@ from .DayNo import DayNo
 from .DayNotoDate import DayNotoDate
 from .DectoHHMM import DectoHHMM
 from .HHMMtoDec import HHMMtoDec
+from .UnixTime import UnixTime
+from .UnixTimetoDate import UnixTimetoDate
+from .DTPlotLabel import DTPlotLabel
 
 from .CDFEpochToUT import CDFEpochToUT
 from .Filter import make_filter,lsfilter

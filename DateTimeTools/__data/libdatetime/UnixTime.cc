@@ -29,10 +29,8 @@ void PopulateYearUnixT() {
 			nDays = 365;
 		}
 		YearUnixT[i+1] = YearUnixT[i] + ((double) nDays)*86400.0;
-		if (i < 20) {
-			dt += YearUnixT[i+1];
-		}
 	}
+	dt = YearUnixT[20];
 	
 	/* now subtract the difference */
 	for (i=0;i<=100;i++) {
@@ -52,7 +50,7 @@ void PopulateYearUnixT() {
  * 			int		Year	Year, obviously
  *
  * RETURNS :
- * 			double	utc		Continuous time at the start of the year
+ * 			double	unixt	Continuous time at the start of the year
  * 
  * ********************************************************************/
 double GetYearUnixT(int Year) {
@@ -97,7 +95,7 @@ double GetYearUnixT(int Year) {
 
 
 /***********************************************************************
- * NAME : 		void UnixTime(n,Date,ut,unix)
+ * NAME : 		void UnixTime(n,Date,ut,unixt)
  * 
  * DESCRIPTION : 	Calculates the unix time in seconds since 00:00
  * 					on 19700101 for an array of dates and times. NOTE:
@@ -110,15 +108,15 @@ double GetYearUnixT(int Year) {
  * 			float	ut			Time array in decimal hours
  *
  * OUTPUTS :
- * 			double 	*unix		Unix time in seconds since 19700101
+ * 			double 	*unixt		Unix time in seconds since 19700101
  * 
  * ********************************************************************/
-void UnixTime(int n, int *Date, float *ut, double *unix) {
+void UnixTime(int n, int *Date, float *ut, double *unixt) {
 	
 	/* copy the time across from ut to utc */
 	int i;
 	for (i=0;i<n;i++) {
-		unix[i] = 3600.0*ut[i];
+		unixt[i] = 3600.0*ut[i];
 	}
 	
 	
@@ -149,7 +147,7 @@ void UnixTime(int n, int *Date, float *ut, double *unix) {
 		
 		/*loop through each one */
 		for (j=0;j<ni;j++) {
-			unix[ind[j]] += utcDay;
+			unixt[ind[j]] += utcDay;
 		}
 	}
 	
@@ -163,13 +161,13 @@ void UnixTime(int n, int *Date, float *ut, double *unix) {
 
 
 /***********************************************************************
- * NAME : 		void UnixTimetoDate(n,Date,ut,unix)
+ * NAME : 		void UnixTimetoDate(n,Date,ut,unixt)
  * 
  * DESCRIPTION : 	Calculates the date and time from the unix
  * 					time given by ContUT,
  * INPUTS : 
  * 			int 	n			Number of elemenets in Date/ut arrays
- * 			double 	*utc		Unix time in hours since 00:00 on
+ * 			double 	*unixt		Unix time in hours since 00:00 on
  * 								19700101
  *
  * OUTPUTS :
@@ -177,19 +175,20 @@ void UnixTime(int n, int *Date, float *ut, double *unix) {
  * 			float	ut			Time array in decimal hours
  * 
  * ********************************************************************/
-void UnixTimetoDate(int n, double *unix, int *Date, float *ut) {
+void UnixTimetoDate(int n, double *unixt, int *Date, float *ut) {
 	
 	
 	/* Start by getting the ut (from 0 - 24) and the remaining utc */
 	int i, j;
 	double *utcr = new double[n];
+	double *utd = new double[n];
 	for (i=0;i<n;i++) {
-		ut[i] = (float) fmod(unix[i]/3600.0,24.0);
-		if (unix[i] < 0) {
-			ut[i] += 24.0;
+		utd[i] = fmod(unixt[i]/3600.0,24.0);
+		if (unixt[i] < 0) {
+			utd[i] += 24.0;
 		}
-		utcr[i] = unix[i] - (double) ut[i]*3600.0;
-
+		utcr[i] = unixt[i] - utd[i]*3600.0;
+		ut[i] = (float) utd[i];
 	}
 	
 	/* find the unique values of utcr */
@@ -239,6 +238,7 @@ void UnixTimetoDate(int n, double *unix, int *Date, float *ut) {
 	delete ind;
 	delete uutcr;
 	delete utcr;
+	delete utd;
 		
 	
 }

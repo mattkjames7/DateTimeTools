@@ -50,6 +50,22 @@ _CContUTtoDate.argtypes = [	c_int,			#The number of dates
 							c_int_ptr,		#Output array of date
 							c_float_ptr]	#Output array of ut
 							
+#unix time
+_CUnixTime = lib.UnixTime
+_CUnixTime.restype = None
+_CUnixTime.argtypes = [	c_int,			#The number of dates
+						c_int_ptr,		#Array of dates
+						c_float_ptr,	#Array of ut
+						c_double_ptr]	#Output array of unix time
+						
+#unix time to date and time				
+_CUnixTimetoDate = lib.UnixTimetoDate
+_CUnixTimetoDate.restype = None
+_CUnixTimetoDate.argtypes = [	c_int,			#The number of dates
+							c_double_ptr,	#Array of unix time
+							c_int_ptr,		#Output array of date
+							c_float_ptr]	#Output array of ut
+							
 #Date difference
 _CDateDifference = lib.DateDifference
 _CDateDifference.restype = c_int

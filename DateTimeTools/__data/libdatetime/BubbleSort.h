@@ -3,7 +3,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#endif
 using namespace std;
 
 /***********************************************************************
@@ -28,3 +27,4 @@ void BubbleSort(int n, T *x, T *y);
 
 
 #include "BubbleSort.cc"
+#endif

@@ -2,8 +2,7 @@
 #define __UNIQUE_H__
 #include <stdio.h>
 #include <stdlib.h>
-
-#endif
+#include "BubbleSort.h"
 using namespace std;
 
 
@@ -25,3 +24,4 @@ template <typename T>
 void Unique(int n, T *x, int *nu, T *ux);
 
 #include "Unique.cc"
+#endif

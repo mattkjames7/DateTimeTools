@@ -14,6 +14,7 @@ o:
 	#g++ -c -fPIC WhereEq.cc
 	#g++ -c -fPIC BubbleSort.cc
 	g++ -c -fPIC -fPIC ContUT.cc
+	g++ -c -fPIC -fPIC UnixTime.cc
 	#g++ -c -fPIC Unique.cc
 	g++ -c -fPIC NearestTimeIndex.cc
 	g++ -c -fPIC WithinTimeRange.cc

@@ -37,4 +37,4 @@ def MidTime(Date0,ut0,Date1,ut1):
 	#run the C++ routine
 	_CMidTime(_Date0,_ut0,_Date1,_ut1,_mDate,_mut)
 	
-	return _mDate,_mut
+	return _mDate[0],_mut[0]

@@ -2,7 +2,7 @@ import numpy as np
 from ._CFunctions import _CWithinTimeRange
 from ._CTConv import _CTConv
 
-def WithinTimeRange(Timet,Time0,Time1,BoolOut=True):
+def WithinTimeRange(Timet,Time0,Time1,BoolOut=False):
 	'''
 	Performs a simple check on a test time (Timet) to see if it exists
 	between Time0 and time1.
@@ -47,6 +47,7 @@ def WithinTimeRange(Timet,Time0,Time1,BoolOut=True):
 		T1 = Time1
 		D1 = 20000101	
 	
+	
 	if sh[0] == 2 and np.size(sh) == 2:
 		#hopefully this is a list of date and time
 		D = np.array([Timet[0]]).flatten()
@@ -68,11 +69,11 @@ def WithinTimeRange(Timet,Time0,Time1,BoolOut=True):
 		
 		
 	#call the C++ code
-	_CWithinTimeRange(_n,_Date,_ut,_date0,_ut0,_date1,_ut1,_ni,_ind)
+	_CWithinTimeRange(_n,_Date,_ut,_Date0,_ut0,_Date1,_ut1,_ni,_ind)
 	
 	#reduce the side of the index array
 	_ind = _ind[:_ni[0]]
-	
+
 	#either return the indices or the boolean array
 	if BoolOut:
 		out = np.zeros(_n,dtype='bool8')

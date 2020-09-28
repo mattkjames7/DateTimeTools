@@ -35,7 +35,7 @@ void WithinTimeRange(int n, int *Date, float *ut,
 						
 	/* scan throught he array to see which are within the time range */
 	int i;
-	int p;
+	int p = 0;
 	
 	for (i=0;i<n;i++) {
 		if ((utc[i] >= utc0) && (utc[i] <= utc1)) {

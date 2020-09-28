@@ -1,6 +1,40 @@
 import numpy as np
+from ._CFunctions import _CJulDay
+from ._CTConv import _CTConv
 
-def JulDay(Date,ut=12.0):
+def JulDay(Date,ut):
+	'''
+	Converts date and time into Julian date
+	
+	Inputs
+	======
+	Date : int
+		Array or scalar of dates
+	ut : float
+		Array or scalar of times in hours since the start of the day
+		
+	Returns
+	=======
+	jd : float64
+		Julian date
+	'''
+
+	#convert the inputs into the exact dtypes required for C++
+	_n = _CTConv(np.size(ut),'c_int')
+	_Date = _CTConv(Date,'c_int_ptr')
+	_ut = _CTConv(ut,'c_float_ptr')
+	_jd = np.zeros(_n,dtype='float64')
+
+	#call the C++ function
+	_CJulDay(_n,_Date,_ut,_jd)
+	
+	return _jd
+
+
+
+
+
+def JulDayOld(Date,ut=12.0):
 	'''
 	Convert Date and time into Julian day.
 	'''

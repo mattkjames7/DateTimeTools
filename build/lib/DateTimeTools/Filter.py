@@ -39,7 +39,9 @@ def make_filter(cutoff_period,sample_freq,ftype='high'):
 		fltr=fltr*norm
 	
 	#normalise to length of filter
-	fltr=fltr/(2*N-1)
+	#this bit is fltr=fltr/N in IDL
+	#fltr=fltr/(2*N-1)
+	fltr=fltr/N
 	
 	return fltr
 

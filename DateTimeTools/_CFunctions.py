@@ -34,6 +34,21 @@ c_bool_ptr = np.ctypeslib.ndpointer(ct.c_bool,flags="C_CONTIGUOUS")
 
 #now to define the functions
 
+#Julian date
+_CJulDay = lib.JulDay
+_CJulDay.restype = None
+_CJulDay.argtypes = [	c_int,			#The number of dates
+						c_int_ptr,		#Array of dates
+						c_float_ptr,	#Array of ut
+						c_double_ptr]	#Output array of julian date
+#Julian date
+_CJulDaytoDate = lib.JulDaytoDate
+_CJulDaytoDate.restype = None
+_CJulDaytoDate.argtypes = [	c_int,		#The number of dates
+						c_double_ptr,	#input julian date	
+						c_int_ptr,		#Array of dates
+						c_float_ptr]	#output ut
+
 #continuous time
 _CContUT = lib.ContUT
 _CContUT.restype = None

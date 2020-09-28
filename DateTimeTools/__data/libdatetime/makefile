@@ -18,6 +18,8 @@ o:
 	#g++ -c -fPIC Unique.cc
 	g++ -c -fPIC NearestTimeIndex.cc
 	g++ -c -fPIC WithinTimeRange.cc
+	g++ -c -fPIC JulDay.cc
+	g++ -c -fPIC JulDaytoDate.cc
 
 lib: 
 	g++ -shared -fPIC -o libdatetime.so *.o

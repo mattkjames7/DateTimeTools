@@ -54,7 +54,6 @@ def DTPlotLabel(fig,Seconds=False,IncludeYear=True,TickFreq='default',
 		
 	#get the time range and tick mark locations
 	trnge = np.array(ax.get_xlim())
-	print(trnge)
 	tlen = (trnge[1] - trnge[0])	
 	mt = ax.xaxis.get_majorticklocs()
 	
@@ -81,7 +80,6 @@ def DTPlotLabel(fig,Seconds=False,IncludeYear=True,TickFreq='default',
 		#time should already be converted to hours, now we need to work
 		#out the amount ot time difference between 1950 and 1970
 		dt = ContUT(19700101,0.0) 	
-		print(dt)
 	trnge += dt
 	tlen += dt
 	mt += dt
@@ -103,12 +101,11 @@ def DTPlotLabel(fig,Seconds=False,IncludeYear=True,TickFreq='default',
 		mt = np.arange(mt0,mt1+tf,tf)
 		use = np.where((mt >= trnge[0]) & ( mt <= trnge[1]))[0]
 		mt = mt[use]		
-	print(mt)
 	
 	#work out the tick labels
 	n = mt.size
 	hh,mm,ss,ms = DectoHHMM(mt % 24.0)
-	print('here')
+
 	utstr = np.zeros(n,dtype='object')
 	for i in range(0,n):
 		if Seconds:
@@ -123,12 +120,13 @@ def DTPlotLabel(fig,Seconds=False,IncludeYear=True,TickFreq='default',
 			if hh[i] > 23:
 				hh[i] = 0
 			utstr[i] = '{:02n}:{:02n}'.format(hh[i],mm[i])		
-	
+
 	if ShowDate:
 		Months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
 		labels = np.zeros(n,dtype='object')
 		d,t = ContUTtoDate(mt)
 		yr,mn,dy = DateSplit(d)
+
 		for i in range(0,n):
 			datestr = '{:02d} '.format(np.int(dy[i]))+Months[mn[i]-1]
 			if IncludeYear:
@@ -138,7 +136,6 @@ def DTPlotLabel(fig,Seconds=False,IncludeYear=True,TickFreq='default',
 	else:
 		#here we just want hh:mm(:ss)
 		labels = utstr
-		
 	#check all of the new labels are within the limits of the plot
 	use = np.where((mt >= trnge[0]) & (mt <= trnge[1]))[0]
 	mt = mt[use]

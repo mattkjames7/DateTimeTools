@@ -198,7 +198,7 @@ void UnixTimetoDate(int n, double *unixt, int *Date, float *ut) {
 	
 	/* now loop thgouh each one */
 	int ni;
-	int *ind = new int[nu];
+	int *ind = new int[n];
 	int yr, dn, dt;
 	double utcYear;
 	for (i=0;i<nu;i++) {

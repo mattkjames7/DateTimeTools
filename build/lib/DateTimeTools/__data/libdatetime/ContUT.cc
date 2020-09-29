@@ -176,7 +176,7 @@ void ContUTtoDate(int n, double *utc, int *Date, float *ut) {
 	int i, j;
 	double *utcr = new double[n];
 	double *utd = new double[n];
-	
+
 	for (i=0;i<n;i++) {
 		utd[i] = fmod(utc[i],24.0);
 		if (utc[i] < 0) {
@@ -189,17 +189,18 @@ void ContUTtoDate(int n, double *utc, int *Date, float *ut) {
 	/* find the unique values of utcr */
 	double *uutcr = new double[n];
 	int nu;
+
 	Unique(n,utcr,&nu,uutcr);
 	
 	/* now loop through each one */
 	int ni;
-	int *ind = new int[nu];
+	int *ind = new int[n];
 	int yr, dn, dt;
 	double utcYear;
 	for (i=0;i<nu;i++) {
 		/* get all of the times with the same date */
 		WhereEq(n,utcr,uutcr[i],&ni,ind);
-		
+
 		/* work out the year first */
 		yr = 2000;
 		utcYear = GetYearUTC(yr);
@@ -218,13 +219,13 @@ void ContUTtoDate(int n, double *utc, int *Date, float *ut) {
 				utcYear = GetYearUTC(yr);
 			}
 		}
-		
+
 		/* we know the year, now to find the number of days */
 		dn = (int) round((uutcr[i] - utcYear)/24.0 + 1.0);
-		
+
 		/* work out the date integer */
 		DayNotoDate(1,&yr,&dn,&dt);
-		
+
 		/* Fill in the output array */
 		for (j=0;j<ni;j++) {
 			Date[ind[j]] = dt;

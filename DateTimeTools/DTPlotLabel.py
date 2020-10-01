@@ -81,7 +81,6 @@ def DTPlotLabel(fig,Seconds=False,IncludeYear=True,TickFreq='default',
 		#out the amount ot time difference between 1950 and 1970
 		dt = ContUT(19700101,0.0) 	
 	trnge += dt
-	tlen += dt
 	mt += dt
 				
 	#recalculate the tick frequency if needed

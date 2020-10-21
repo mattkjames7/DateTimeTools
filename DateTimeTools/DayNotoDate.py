@@ -21,7 +21,7 @@ def DayNotoDate(Year,Doy):
 	'''
 
 	#convert the inputs into the exact dtypes required for C++
-	_n = _CTConv(np.size(ut),'c_int')
+	_n = _CTConv(np.size(Doy),'c_int')
 	_Year = _CTConv(Year,'c_int_ptr')
 	_Doy = _CTConv(Doy,'c_int_ptr')
 	_Date = np.zeros(_n,dtype='int32')

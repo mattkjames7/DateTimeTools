@@ -40,5 +40,5 @@ int DateDifference(int Date0, int Date1) {
 		ndays++;
 	}
 	
-	return ndays;
+	return dir*ndays;
 }

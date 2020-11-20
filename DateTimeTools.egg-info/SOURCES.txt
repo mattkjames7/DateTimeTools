@@ -19,6 +19,7 @@ DateTimeTools/HHMMtoDec.py
 DateTimeTools/JulDay.py
 DateTimeTools/JulDaytoDate.py
 DateTimeTools/LeapYear.py
+DateTimeTools/ListDates.py
 DateTimeTools/MidTime.py
 DateTimeTools/MinusDay.py
 DateTimeTools/NearestTimeIndex.py

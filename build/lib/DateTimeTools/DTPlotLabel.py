@@ -4,7 +4,7 @@ from .ContUTtoDate import ContUTtoDate
 from .DateSplit import DateSplit
 from .DectoHHMM import DectoHHMM
 
-def DTPlotLabel(fig,Seconds=False,IncludeYear=True,TickFreq='default',
+def DTPlotLabel(fig,Seconds=False,IncludeYear=True,TickFreq='auto',
 				TimeFMT='utc',ShowDate=True,Date=None):
 	'''
 	Simple subroutine to convert the time axis of a plot to show human 

@@ -20,7 +20,7 @@ def DayNo(Date):
 	'''
 
 	#convert the inputs into the exact dtypes required for C++
-	_n = _CTConv(np.size(Doy),'c_int')
+	_n = _CTConv(np.size(Date),'c_int')
 	_Date = _CTConv(Date,'c_int_ptr')
 	_Year = np.zeros(_n,dtype='int32')
 	_Doy = np.zeros(_n,dtype='int32')

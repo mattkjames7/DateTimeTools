@@ -31,7 +31,7 @@ def HHMMtoDec(hh,mm=None,ss=None,ms=None):
 	if not mm is None:
 		_mm = _CTConv(mm,'c_double_ptr')
 	else:
-		_mm = np.zeros(_n,dtype='flaot64')
+		_mm = np.zeros(_n,dtype='float64')
 	if not ss is None:
 		_ss = _CTConv(ss,'c_double_ptr')
 	else:

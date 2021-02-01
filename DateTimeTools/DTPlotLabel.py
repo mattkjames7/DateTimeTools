@@ -87,7 +87,9 @@ def DTPlotLabel(fig,Seconds=False,IncludeYear=True,TickFreq='auto',
 	if not TickFreq == 'default':
 		#set the tick frequency in hours
 		if TickFreq == 'auto':
-			tfs = np.array([1440.0,720.0,360.0,240.0,180.0,120.0,60.0,30.0,15.0,10.0,5.0,2.0,1.0])
+			tfs = np.array([524160.0,262080.0,100800.0,40320.0,20160.0,
+							10080.0,5760.0,2880.0,1440.0,720.0,360.0,
+							240.0,180.0,120.0,60.0,30.0,15.0,10.0,5.0,2.0,1.0])
 			dtf = np.abs(60.0*tlen/tfs - 5.0)
 			use = np.where(dtf == np.min(dtf))[0][0]
 			tf = tfs[use]/60.0

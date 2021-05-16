@@ -37,7 +37,7 @@ void JulDay(int n, int *Date, float *ut, double *JD) {
 		F = (int) (30.6001*((float) (mn[i] + 1)));
 		JD[i] = C + dy[i] + E + F - 1524.5 + ((double) ut[i])/24.0;
 	}
-	delete yr;
-	delete mn;
-	delete dy;
+	delete [] yr;
+	delete [] mn;
+	delete [] dy;
 }

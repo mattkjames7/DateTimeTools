@@ -56,7 +56,7 @@ void JulDaytoDate(int n, double *JD, int *Date, float *ut) {
 	DateJoin(n,yr,mn,dy,Date);
 
 	
-	delete yr;
-	delete mn;
-	delete dy;
+	delete [] yr;
+	delete [] mn;
+	delete [] dy;
 }

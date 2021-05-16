@@ -38,7 +38,7 @@ void Unique(int n, T *x, int *nu, T *ux) {
 	nu[0] = p;
 	
 	/* delete the sorted array */
-	delete sx;	
+	delete[] sx;	
 		
 	
 }

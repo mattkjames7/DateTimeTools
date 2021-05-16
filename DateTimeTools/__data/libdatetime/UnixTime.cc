@@ -152,10 +152,10 @@ void UnixTime(int n, int *Date, float *ut, double *unixt) {
 	}
 	
 	/* delete temporary arrays */
-	delete ind;
-	delete yrs;
-	delete dns;
-	delete uDate;
+	delete [] ind;
+	delete [] yrs;
+	delete [] dns;
+	delete [] uDate;
 	
 }
 
@@ -235,10 +235,10 @@ void UnixTimetoDate(int n, double *unixt, int *Date, float *ut) {
 			Date[ind[j]] = dt;
 		}	
 	}
-	delete ind;
-	delete uutcr;
-	delete utcr;
-	delete utd;
+	delete [] ind;
+	delete [] uutcr;
+	delete [] utcr;
+	delete [] utd;
 		
 	
 }

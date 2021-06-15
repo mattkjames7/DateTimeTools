@@ -13,8 +13,8 @@ o:
 	g++ -c -fPIC MidTime.cc
 	#g++ -c -fPIC WhereEq.cc
 	#g++ -c -fPIC BubbleSort.cc
-	g++ -c -fPIC -fPIC ContUT.cc
-	g++ -c -fPIC -fPIC UnixTime.cc
+	g++ -c -fPIC ContUT.cc 
+	g++ -c -fPIC  UnixTime.cc
 	#g++ -c -fPIC Unique.cc
 	g++ -c -fPIC NearestTimeIndex.cc
 	g++ -c -fPIC WithinTimeRange.cc
@@ -22,7 +22,7 @@ o:
 	g++ -c -fPIC JulDaytoDate.cc
 
 lib: 
-	g++ -shared -fPIC -o libdatetime.so *.o
+	g++ -shared -fPIC -o libdatetime.so *.o -Wall
 
 clean:
 	rm -v *.o *.so

@@ -1,3 +1,5 @@
+__version__ = "0.2.3"
+
 from . import _CFunctions
 from .ContUT import ContUT
 from .ContUTtoDate import ContUTtoDate

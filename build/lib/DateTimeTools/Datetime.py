@@ -25,7 +25,7 @@ def Datetime(Date,ut):
 	#split the daates and time
 	yr,mn,dy = DateSplit(Date)
 	hh,mm,ss,ms = DectoHHMM(ut)	
-	ms = ms.astype('int32')
+	ms = (ms*1000.0).astype('int32')
 	
 	#create the datetime arrays
 	n = yr.size

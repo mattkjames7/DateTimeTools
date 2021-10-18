@@ -23,6 +23,7 @@ o:
 
 lib: 
 	g++ -shared -fPIC -o libdatetime.so *.o -Wall
+	rm -v *.o
 
 clean:
 	rm -v *.o *.so

@@ -1,25 +1,15 @@
 import numpy as np
 import ctypes as ct
-import os
+from ._SourceCompilation import getLibFilename, compileSource
 
 #Attempt to load the shared object file 
 #if it can't then it probably needs recompiling
 try:
-	lib = ct.CDLL(os.path.dirname(__file__)+"/__data/libdatetime/libdatetime.so")
+	lib = ct.CDLL(getLibFilename())
 except:
-	print('importing libdatetime.so failed, attempting to recompile')
-	path = os.path.dirname(__file__)
-	if '/usr/local/' in path:
-		sudo = 'sudo '
-	else:
-		sudo = ''
-
-	CWD = os.getcwd()
-	os.chdir(os.path.dirname(__file__)+"/__data/libdatetime/")
-	os.system(sudo+'make clean')
-	os.system(sudo+'make')
-	os.chdir(CWD)	
-	lib = ct.CDLL(os.path.dirname(__file__)+"/__data/libdatetime/libdatetime.so")
+	print('Importing '+getLibFilename(isShort=True)+' failed, attempting to recompile')
+	compileSource()
+	lib = ct.CDLL(getLibFilename())
 
 #define some dtypes
 c_char_p = ct.c_char_p

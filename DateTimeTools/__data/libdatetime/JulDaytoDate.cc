@@ -12,10 +12,10 @@
  *
  * OUTPUTS :
  * 			int		*Date		Date array
- * 			float	*ut			Time array in decimal hours 			
+ * 			double	*ut			Time array in decimal hours 			
  * 
  * ********************************************************************/
-void JulDaytoDate(int n, double *JD, int *Date, float *ut) {
+void JulDaytoDate(int n, double *JD, int *Date, double *ut) {
 	
 	/* split the date */
 	int *yr = new int[n];

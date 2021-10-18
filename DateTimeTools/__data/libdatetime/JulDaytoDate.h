@@ -22,5 +22,5 @@ using namespace std;
  * 
  * ********************************************************************/
 extern "C" {
-	void JulDaytoDate(int n, double *JD, int *Date, float *ut);
+	void JulDaytoDate(int n, double *JD, int *Date, double *ut);
 }

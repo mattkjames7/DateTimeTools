@@ -26,7 +26,7 @@ float TimeDifference(int Date0, float ut0, int Date1, float ut1) {
 	dd = DateDifference(Date0,Date1);
 	
 	/* now the whole time difference */
-	out = dd + (ut1 - ut0)/24.0;
+	out = dd + (ut1 - ut0)/24.0f;
 	
 	return out;
 	

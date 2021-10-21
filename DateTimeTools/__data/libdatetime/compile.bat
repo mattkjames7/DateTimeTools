@@ -47,7 +47,7 @@ if %ERRORLEVEL% neq 0 (goto CompileError)
 g++ -c -fPIC JulDaytoDate.cc
 if %ERRORLEVEL% neq 0 (goto CompileError)
 
-g++ -shared -fPIC -o libdatetime.dll *.o -Wall
+g++ -shared -fPIC -o libdatetime.dll hhmm.o LeapYear.o DateSplit.o DateJoin.o DayNo.o PlusDay.o MinusDay.o DateDifference.o TimeDifference.o MidTime.o ContUT.o UnixTime.o NearestTimeIndex.o WithinTimeRange.o JulDay.o JulDaytoDate.o -Wall
 if %ERRORLEVEL% neq 0 (goto CompileError)
 
 echo Done

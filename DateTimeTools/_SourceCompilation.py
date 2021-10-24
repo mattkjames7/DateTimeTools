@@ -18,7 +18,7 @@ def compileSource():
         os.chdir(CWD)	
     elif(os.name=='nt'):
         CWD = os.getcwd()
-        os.chdir(os.path.dirname(__file__)+"/__data/libdatetime/")
+        os.chdir(os.path.dirname(__file__) + os.path.sep + "__data" + os.path.sep + "libdatetime")
         compile = subprocess.Popen("compile.bat")
         compile.communicate()
         comperr = compile.returncode
@@ -50,7 +50,8 @@ def getLibFilename(isShort=False):
     if(isShort):
         libFilename = "libdatetime."
     else:
-        libFilename = os.path.dirname(__file__)+"/__data/libdatetime/libdatetime."
+        vv = os.path.sep
+        libFilename = os.path.dirname(__file__) + vv + "__data" + vv + "libdatetime" + vv + "libdatetime."
 
     if(os.name=='posix'):
         extention = "so"

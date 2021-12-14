@@ -1,25 +1,42 @@
 import numpy as np
 import ctypes as ct
 import os
+import subprocess
 
 #Attempt to load the shared object file 
 #if it can't then it probably needs recompiling
-try:
-	lib = ct.CDLL(os.path.dirname(__file__)+"/__data/libdatetime/libdatetime.so")
-except:
-	print('importing libdatetime.so failed, attempting to recompile')
-	path = os.path.dirname(__file__)
-	if '/usr/local/' in path:
-		sudo = 'sudo '
-	else:
-		sudo = ''
+if os.name == 'nt':
+	try:
+		lib = ct.CDLL(os.path.dirname(__file__)+"/__data/libdatetime/libdatetime.dll")
+	except:
+		print('importing libdatetime.so failed, attempting to recompile')
+		CWD = os.getcwd()
+		os.chdir(os.path.dirname(__file__)+"/__data/libdatetime/")
+		#thanks to pshustov for showing me how this is done!
+		comp = subprocess.Popen('compile.bat')
+		comp.communicate()
+		comperr = comp.returncode
+		#do something here with the error code if there is one
+		
+		os.chdir(CWD)
+		lib = ct.CDLL(os.path.dirname(__file__)+"/__data/libdatetime/libdatetime.dll")
+else:
+	try:
+		lib = ct.CDLL(os.path.dirname(__file__)+"/__data/libdatetime/libdatetime.so")
+	except:
+		print('importing libdatetime.so failed, attempting to recompile')
+		path = os.path.dirname(__file__)
+		if '/usr/local/' in path:
+			sudo = 'sudo '
+		else:
+			sudo = ''
 
-	CWD = os.getcwd()
-	os.chdir(os.path.dirname(__file__)+"/__data/libdatetime/")
-	os.system(sudo+'make clean')
-	os.system(sudo+'make')
-	os.chdir(CWD)	
-	lib = ct.CDLL(os.path.dirname(__file__)+"/__data/libdatetime/libdatetime.so")
+		CWD = os.getcwd()
+		os.chdir(os.path.dirname(__file__)+"/__data/libdatetime/")
+		os.system(sudo+'make clean')
+		os.system(sudo+'make')
+		os.chdir(CWD)	
+		lib = ct.CDLL(os.path.dirname(__file__)+"/__data/libdatetime/libdatetime.so")
 
 #define some dtypes
 c_char_p = ct.c_char_p

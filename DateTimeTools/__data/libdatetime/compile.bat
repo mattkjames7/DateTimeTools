@@ -1,3 +1,4 @@
+@echo off
 where /q g++
 if %ERRORLEVEL% neq 0 (
 	echo g++ not found
@@ -35,4 +36,6 @@ if %ERRORLEVEL% neq 0 (
 	exit /b 7
 )
 echo Done
+
 exit /b 0
+@echo on

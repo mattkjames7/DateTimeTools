@@ -9,7 +9,7 @@ if os.name == 'nt':
 	try:
 		lib = ct.CDLL(os.path.dirname(__file__)+"/__data/libdatetime/libdatetime.dll")
 	except:
-		print('importing libdatetime.so failed, attempting to recompile')
+		print('importing libdatetime.dll failed, attempting to recompile')
 		CWD = os.getcwd()
 		os.chdir(os.path.dirname(__file__)+"/__data/libdatetime/")
 		#thanks to pshustov for showing me how this is done!
@@ -19,6 +19,14 @@ if os.name == 'nt':
 		#do something here with the error code if there is one
 		
 		os.chdir(CWD)
+		if comperr == 6:
+			exstr = 'Cannot compile libdatetime: g++ not found\nPlease install TDM-GCC'
+			raise Exception(exstr)
+		if comperr == 7:
+			exstr = 'Compilation failed\n'
+			exstr+= 'Please check your g++ configuration and consider opening an issue at\n'
+			exstr+= 'https://github.com/mattkjames7/DateTimeTools/issues'
+			raise Exception(exstr)
 		lib = ct.CDLL(os.path.dirname(__file__)+"/__data/libdatetime/libdatetime.dll")
 else:
 	try:

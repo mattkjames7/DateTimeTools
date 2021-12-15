@@ -1,3 +1,4 @@
+LICENSE
 MANIFEST.in
 README.md
 setup.py
@@ -5,6 +6,7 @@ DateTimeTools/CDFEpoch.py
 DateTimeTools/CDFEpochtoDate.py
 DateTimeTools/ContUT.py
 DateTimeTools/ContUTtoDate.py
+DateTimeTools/DPlotLabel.py
 DateTimeTools/DTPlotLabel.py
 DateTimeTools/DateDifference.py
 DateTimeTools/DateJoin.py
@@ -72,7 +74,9 @@ DateTimeTools/__data/libdatetime/WhereEq.cc
 DateTimeTools/__data/libdatetime/WhereEq.h
 DateTimeTools/__data/libdatetime/WithinTimeRange.cc
 DateTimeTools/__data/libdatetime/WithinTimeRange.h
+DateTimeTools/__data/libdatetime/compile.bat
 DateTimeTools/__data/libdatetime/hhmm.cc
 DateTimeTools/__data/libdatetime/hhmm.h
+DateTimeTools/__data/libdatetime/libdatetime.dll
 DateTimeTools/__data/libdatetime/libdatetime.so
 DateTimeTools/__data/libdatetime/makefile

@@ -1,50 +1,15 @@
 import numpy as np
 import ctypes as ct
-import os
-import subprocess
+from ._SourceCompilation import getLibFilename, compileSource
 
 #Attempt to load the shared object file 
 #if it can't then it probably needs recompiling
-if os.name == 'nt':
-	try:
-		lib = ct.CDLL(os.path.dirname(__file__)+"/__data/libdatetime/libdatetime.dll")
-	except:
-		print('importing libdatetime.dll failed, attempting to recompile')
-		CWD = os.getcwd()
-		os.chdir(os.path.dirname(__file__)+"/__data/libdatetime/")
-		#thanks to pshustov for showing me how this is done!
-		comp = subprocess.Popen('compile.bat')
-		comp.communicate()
-		comperr = comp.returncode
-		#do something here with the error code if there is one
-		
-		os.chdir(CWD)
-		if comperr == 6:
-			exstr = 'Cannot compile libdatetime: g++ not found\nPlease install TDM-GCC'
-			raise Exception(exstr)
-		if comperr == 7:
-			exstr = 'Compilation failed\n'
-			exstr+= 'Please check your g++ configuration and consider opening an issue at\n'
-			exstr+= 'https://github.com/mattkjames7/DateTimeTools/issues'
-			raise Exception(exstr)
-		lib = ct.CDLL(os.path.dirname(__file__)+"/__data/libdatetime/libdatetime.dll")
-else:
-	try:
-		lib = ct.CDLL(os.path.dirname(__file__)+"/__data/libdatetime/libdatetime.so")
-	except:
-		print('importing libdatetime.so failed, attempting to recompile')
-		path = os.path.dirname(__file__)
-		if '/usr/local/' in path:
-			sudo = 'sudo '
-		else:
-			sudo = ''
-
-		CWD = os.getcwd()
-		os.chdir(os.path.dirname(__file__)+"/__data/libdatetime/")
-		os.system(sudo+'make clean')
-		os.system(sudo+'make')
-		os.chdir(CWD)	
-		lib = ct.CDLL(os.path.dirname(__file__)+"/__data/libdatetime/libdatetime.so")
+try:
+	lib = ct.CDLL(getLibFilename())
+except:
+	print('Importing '+getLibFilename(isShort=True)+' failed, attempting to recompile')
+	compileSource()
+	lib = ct.CDLL(getLibFilename())
 
 #define some dtypes
 c_char_p = ct.c_char_p

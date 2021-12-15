@@ -11,11 +11,8 @@ o:
 	g++ -c -fPIC DateDifference.cc
 	g++ -c -fPIC TimeDifference.cc
 	g++ -c -fPIC MidTime.cc
-	#g++ -c -fPIC WhereEq.cc
-	#g++ -c -fPIC BubbleSort.cc
 	g++ -c -fPIC ContUT.cc 
 	g++ -c -fPIC  UnixTime.cc
-	#g++ -c -fPIC Unique.cc
 	g++ -c -fPIC NearestTimeIndex.cc
 	g++ -c -fPIC WithinTimeRange.cc
 	g++ -c -fPIC JulDay.cc
@@ -23,6 +20,7 @@ o:
 
 lib: 
 	g++ -shared -fPIC -o libdatetime.so *.o -Wall
+	rm -v *.o
 
 clean:
-	rm -v *.o *.so
+	rm -v *.so

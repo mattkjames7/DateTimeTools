@@ -28,11 +28,11 @@ void MidTime(int Date0, float ut0, int Date1, float ut1,
 	/*check if Date0 == Date1 (it's easy this way) */
 	if (ndays == 0) {
 		Datem[0] = Date0;
-		utm[0] = 0.5*(ut0 + ut1);
+		utm[0] = 0.5f*(ut0 + ut1);
 	} else {
 		/* This is the slightly more complicated situation:
 		 * Date0 != Date1, so we need to iterate PlusDay */
-		dHour = ndays*24.0 + ut1 - ut0;
+		dHour = ndays*24.0f + ut1 - ut0;
 		nDayHalf = (int) ((dHour/2.0 + ut0)/24.0);
 		Datem[0] = Date0;
 		for (i=0;i<nDayHalf;i++) {

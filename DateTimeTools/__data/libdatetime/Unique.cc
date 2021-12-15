@@ -18,9 +18,9 @@
 template <typename T>
 void Unique(int n, T *x, int *nu, T *ux) {
 	
-	int i, p, pVal;
+	int i, p;
 	p = 0;
-	pVal = 0;
+	T pVal = 0;
 	
 	/* sort the dates first */
 	T *sx = new T[n];
@@ -29,7 +29,7 @@ void Unique(int n, T *x, int *nu, T *ux) {
 	/* loop through sorted dates, adding a new one to the unique array
 	 * when a differnet on is found */
 	for (i=0;i<n;i++) {
-		if ((sx[i] != pVal) || (i == 0)) {
+		if ((i == 0) || (sx[i] != pVal)) {
 			ux[p] = sx[i];
 			pVal = sx[i];
 			p++;

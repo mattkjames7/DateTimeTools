@@ -1,4 +1,4 @@
-__version__ = "1.1.0"
+__version__ = "1.1.1"
 
 from . import _CFunctions
 from .ContUT import ContUT

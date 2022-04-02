@@ -26,10 +26,10 @@ def Datetime(Date,ut):
 	yr,mn,dy = DateSplit(Date)
 	hh,mm,ss,ms = DectoHHMM(ut)	
 	ms = (ms*1000.0).astype('int32')
-	
+
 	#create the datetime arrays
 	n = yr.size
-	dt = np.array([datetime.datetime(yr[i],mn[i],dy[i],hh[i],mm[i],ss[i],ms[i]*1000) for i in range(0,n)])
+	dt = np.array([datetime.datetime(yr[i],mn[i],dy[i],hh[i],mm[i],ss[i],ms[i]) for i in range(0,n)])
 		
 	return dt
 	

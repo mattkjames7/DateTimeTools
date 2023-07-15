@@ -129,7 +129,7 @@ def DTPlotLabel(fig,Seconds=False,IncludeYear=True,TickFreq='auto',
 		yr,mn,dy = DateSplit(d)
 
 		for i in range(0,n):
-			datestr = '{:02d} '.format(np.int(dy[i]))+Months[mn[i]-1]
+			datestr = '{:02d} '.format(np.int32(dy[i]))+Months[mn[i]-1]
 			if IncludeYear:
 				datestr += '\n{:04d}'.format(yr[i])
 			labels[i] = utstr[i] + '\n' + datestr			

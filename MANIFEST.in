@@ -1,6 +1,1 @@
-include DateTimeTools/__data/libdatetime/*.cc
-include DateTimeTools/__data/libdatetime/*.h
-include DateTimeTools/__data/libdatetime/makefile
-include DateTimeTools/__data/libdatetime/compile.bat
-include DateTimeTools/__data/libdatetime/*.so
-include DateTimeTools/__data/libdatetime/*.dll
+recursive-include DateTimeTools/__data/datetime

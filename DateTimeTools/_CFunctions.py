@@ -7,7 +7,7 @@ import os
 try:
 	if platform.system() == 'Darwin':
 		cwd = os.getcwd()
-		os.chdir(Globals.ModulePath + '__data/datetime/lib/')
+		os.chdir(os.path.dirname(__file__) + '/__data/datetime/lib/')
 		lib = ct.CDLL(getLibFilename(True))
 		os.chdir(cwd)
 	elif platform.system() == 'Windows':

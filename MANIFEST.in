@@ -1,1 +1,1 @@
-recursive-include DateTimeTools/__data/datetime
+recursive-include DateTimeTools/__data/datetime *

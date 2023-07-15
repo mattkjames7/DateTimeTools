@@ -23,7 +23,7 @@ source library
 		libFilename = "libdatetime."
 	else:
 		vv = os.path.sep
-		libFilename = os.path.dirname(__file__) + vv + "__data" + vv + "datetime" + vv + "lib" + vv + "datetime."
+		libFilename = os.path.dirname(__file__) + vv + "__data" + vv + "datetime" + vv + "lib" + vv + "libdatetime."
 
 
 	systype = platform.system()

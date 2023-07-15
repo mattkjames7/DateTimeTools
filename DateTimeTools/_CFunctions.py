@@ -1,15 +1,24 @@
 import numpy as np
 import ctypes as ct
-from ._SourceCompilation import getLibFilename, compileSource
+from ._CppLib import getLibFilename,addWindowsSearchPaths
+import platform
+import os
 
-#Attempt to load the shared object file 
-#if it can't then it probably needs recompiling
 try:
-	lib = ct.CDLL(getLibFilename())
+	if platform.system() == 'Darwin':
+		cwd = os.getcwd()
+		os.chdir(Globals.ModulePath + '__data/datetime/lib/')
+		lib = ct.CDLL(getLibFilename(True))
+		os.chdir(cwd)
+	elif platform.system() == 'Windows':
+		addWindowsSearchPaths()
+		lib = ct.CDLL(getLibFilename())
+	else:
+		lib = ct.CDLL(getLibFilename())
 except:
-	print('Importing '+getLibFilename(isShort=True)+' failed, attempting to recompile')
-	compileSource()
-	lib = ct.CDLL(getLibFilename())
+	print('Importing '+getLibFilename(isShort=True)+' failed, please reinstall')
+	raise SystemError
+
 
 #define some dtypes
 c_char_p = ct.c_char_p

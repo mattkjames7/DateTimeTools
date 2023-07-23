@@ -24,7 +24,7 @@ def CDFEpochtoDate(cdfe):
 	'''
 
 	#convert using cdflib
-	dt = cdflib.cdfepoch.breakdown(cdfe,to_np=True).T
+	dt = cdflib.cdfepoch.breakdown(cdfe).T
 	
 	#check if there is more time information than just ms
 	if dt.shape[0] == 9:

@@ -17,10 +17,11 @@ class CustomBuild(build_py):
 				cwd = os.getcwd()
 				os.chdir('DateTimeTools/__data/datetime/')
 				cmd = ['cmd','/c','compile.bat']
+				subprocess.check_call(cmd, stderr=subprocess.STDOUT)
 				os.chdir(cwd)
 			else:
 				cmd = ['make', '-C', 'DateTimeTools/__data/datetime']
-			subprocess.check_call(cmd, stderr=subprocess.STDOUT)
+				subprocess.check_call(cmd, stderr=subprocess.STDOUT)
 		except subprocess.CalledProcessError as e:
 			print("Compilation failed with the following output:")
 			print(e.output)

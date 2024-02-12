@@ -12,15 +12,19 @@ class CustomBuild(build_py):
 		build_py.run(self)
 
 	def target_build(self):
-		if platform.system() == 'Windows':
-			cwd = os.getcwd()
-			os.chdir('DateTimeTools/__data/datetime/')
-			subprocess.check_call(['cmd','/c','compile.bat'])
-			os.chdir(cwd)
-		else:
-			subprocess.check_call(['make', '-C', 'DateTimeTools/__data/datetime'])
-
-
+		try:
+			if platform.system() == 'Windows':
+				cwd = os.getcwd()
+				os.chdir('DateTimeTools/__data/datetime/')
+				cmd = ['cmd','/c','compile.bat']
+				os.chdir(cwd)
+			else:
+				cmd = ['make', '-C', 'DateTimeTools/__data/datetime']
+			subprocess.check_call(cmd, stderr=subprocess.STDOUT)
+		except subprocess.CalledProcessError as e:
+			print("Compilation failed with the following output:")
+			print(e.output)
+			raise			
 
 with open("README.md", "r") as fh:
 	long_description = fh.read()

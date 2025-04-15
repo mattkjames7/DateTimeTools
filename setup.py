@@ -20,8 +20,14 @@ class CustomBuild(build_py):
 				subprocess.check_call(cmd, stderr=subprocess.STDOUT)
 				os.chdir(cwd)
 			else:
-				cmd = ['make', '-C', 'DateTimeTools/__data/datetime']
+				#cmd = ['make', '-C', 'DateTimeTools/__data/datetime']
+				cwd = os.getcwd()
+				os.chdir('DateTimeTools/__data/datetime/')
+				cmd = ["cmake","-DCMAKE_INSTALL_PREFIX=/usr/local","-B","build"]
 				subprocess.check_call(cmd, stderr=subprocess.STDOUT)
+				cmd = ["cmake","--build","build"]
+				subprocess.check_call(cmd, stderr=subprocess.STDOUT)
+				os.chdir(cwd)
 		except subprocess.CalledProcessError as e:
 			print("Compilation failed with the following output:")
 			print(e.output)
@@ -76,6 +82,7 @@ setup(
 		'numpy',
 		'scipy',
 		'cdflib',
+		'cmake'
 	],
 	include_package_data=True,
 )

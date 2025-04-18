@@ -19,6 +19,6 @@ def test_hhmmtohours():
     reverse of the above
     """
 
-    ut = dt.DectoHHMM(22, 15, 0, 0)
+    ut = dt.HHMMtoDec(22, 15, 0, 0)
 
     assert ut == 22.25

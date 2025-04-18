@@ -81,8 +81,7 @@ setup(
 	install_requires=[
 		'numpy',
 		'scipy',
-		'cdflib',
-		'cmake'
+		'cdflib'
 	],
 	include_package_data=True,
 )

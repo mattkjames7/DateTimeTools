@@ -76,7 +76,7 @@ def WithinTimeRange(Timet,Time0,Time1,BoolOut=False):
 
 	#either return the indices or the boolean array
 	if BoolOut:
-		out = np.zeros(_n,dtype='bool8')
+		out = np.zeros(_n,dtype='bool')
 		out[_ind] = True
 		return out
 	else:

@@ -83,7 +83,7 @@ jobs:
           # Use a default python version for the Docker target – adjust if needed.
           pyver="3.13"
           pyref="py${pyver//./}"
-          docker_image="DateTimeTools:${pyref}"
+          docker_image="datetimetools:${pyref}"
           echo "Docker image: ${docker_image}"
           echo "docker_image=${docker_image}" >> $GITHUB_ENV
           docker build --target $pyref -t $docker_image .

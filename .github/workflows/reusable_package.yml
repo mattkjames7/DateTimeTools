@@ -29,7 +29,7 @@ jobs:
         run: |
           pyver="${{ inputs.python_version }}"
           pyref="py${pyver//./}"
-          docker_image="DateTimeTools:${pyref}"
+          docker_image="datetimetools:${pyref}"
           echo "Docker image: ${docker_image}"
           echo "docker_image=${docker_image}" >> $GITHUB_ENV
           docker build --target $pyref -t $docker_image .

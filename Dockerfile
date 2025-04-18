@@ -11,6 +11,7 @@ RUN apt-get update && \
         build-essential \
         wget \
         ca-certificates \
+        cmake \
         && rm -rf /var/lib/apt/lists/*
 
 

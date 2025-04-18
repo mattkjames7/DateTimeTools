@@ -100,7 +100,7 @@ jobs:
         id: build_pkg
         run: |
           # Build the package inside the container
-          docker exec -u ubuntu ${{ env.docker_container }} bash -c "cd /DateTimeTools && source /app/venv/bin/activate && python setup.py bdist_wheel"
+          docker exec -u ubuntu ${{ env.docker_container }} bash -c "cd /DateTimeTools && source /app/venv/bin/activate && python setup.py sdist"
           # Find the generated wheel (assumes there's only one)
           pkg=$(docker exec -u ubuntu ${{ env.docker_container }} bash -c "cd /DateTimeTools/dist && ls *.whl")
           echo "Built package: $pkg"

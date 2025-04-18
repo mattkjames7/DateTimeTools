@@ -43,7 +43,7 @@ jobs:
 
       - name: Build Package
         run: |
-          docker exec -u ubuntu ${{ env.docker_container }} bash -c "cd /DateTimeTools && source /app/venv/bin/activate && python setup.py bdist_wheel"
+          docker exec -u ubuntu ${{ env.docker_container }} bash -c "cd /DateTimeTools && source /app/venv/bin/activate && python setup.py sdist"
           pkg=$(docker exec -u ubuntu ${{ env.docker_container }} bash -c "cd /DateTimeTools/dist && ls")
           echo "Built package: $pkg"
           echo "pkg=$pkg" >> $GITHUB_ENV

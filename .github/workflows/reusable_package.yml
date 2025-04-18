@@ -37,20 +37,20 @@ jobs:
       - name: Run Docker Image
         run: |
           echo "docker_image is '${{ env.docker_image }}'"
-          docker_container=kptest
+          docker_container=dttest
           echo "docker_container=$docker_container" >> $GITHUB_ENV
           docker run --name $docker_container --rm -d ${{ env.docker_image }}
 
       - name: Build Package
         run: |
-          docker exec -u kp ${{ env.docker_container }} bash -c "cd /DateTimeTools && source /app/venv/bin/activate && python setup.py bdist_wheel"
-          pkg=$(docker exec -u kp ${{ env.docker_container }} bash -c "cd /DateTimeTools/dist && ls")
+          docker exec -u ubuntu ${{ env.docker_container }} bash -c "cd /DateTimeTools && source /app/venv/bin/activate && python setup.py bdist_wheel"
+          pkg=$(docker exec -u ubuntu ${{ env.docker_container }} bash -c "cd /DateTimeTools/dist && ls")
           echo "Built package: $pkg"
           echo "pkg=$pkg" >> $GITHUB_ENV
 
       - name: Install Package
         run: |
-          docker exec -u kp ${{ env.docker_container }} bash -c "cd /DateTimeTools/dist && /app/venv/bin/pip install $pkg"
+          docker exec -u ubuntu ${{ env.docker_container }} bash -c "cd /DateTimeTools/dist && /app/venv/bin/pip install $pkg"
 
       - name: Copy Package
         run: |
@@ -59,8 +59,9 @@ jobs:
       - name: Run Tests
         if: ${{ inputs.run_tests == 'true' }}
         run: |
-          echo "Run update test"
-
+          echo "Run Tests"
+          docker exec -u ubuntu ${{ env.docker_container }} bash -c "cd /DateTimeTools/dist && /app/venv/bin/pip install pytest"
+          docker exec -u ubuntu ${{ env.docker_container }} bash -c "cd /DateTimeTools/tests && source /app/venv/bin/activate && pytest ."
 
       - name: Clean Up
         if: always()

@@ -91,7 +91,7 @@ jobs:
       - name: Run Docker Container
         run: |
           echo "docker_image is '${{ env.docker_image }}'"
-          docker_container=kptest
+          docker_container=dttest
           echo "docker_container=$docker_container" >> $GITHUB_ENV
           # Run container without --rm so we can interact with it
           docker run --name $docker_container -d ${{ env.docker_image }}
@@ -100,9 +100,9 @@ jobs:
         id: build_pkg
         run: |
           # Build the package inside the container
-          docker exec -u kp ${{ env.docker_container }} bash -c "cd /DateTimeTools && source /app/venv/bin/activate && python setup.py bdist_wheel"
+          docker exec -u ubuntu ${{ env.docker_container }} bash -c "cd /DateTimeTools && source /app/venv/bin/activate && python setup.py bdist_wheel"
           # Find the generated wheel (assumes there's only one)
-          pkg=$(docker exec -u kp ${{ env.docker_container }} bash -c "cd /DateTimeTools/dist && ls *.whl")
+          pkg=$(docker exec -u ubuntu ${{ env.docker_container }} bash -c "cd /DateTimeTools/dist && ls *.whl")
           echo "Built package: $pkg"
           echo "pkg=$pkg" >> $GITHUB_ENV
 

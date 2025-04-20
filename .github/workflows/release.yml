@@ -102,7 +102,7 @@ jobs:
           # Build the package inside the container
           docker exec -u ubuntu ${{ env.docker_container }} bash -c "cd /DateTimeTools && source /app/venv/bin/activate && python setup.py sdist"
           # Find the generated wheel (assumes there's only one)
-          pkg=$(docker exec -u ubuntu ${{ env.docker_container }} bash -c "cd /DateTimeTools/dist && ls *.whl")
+          pkg=$(docker exec -u ubuntu ${{ env.docker_container }} bash -c "cd /DateTimeTools/dist && ls *.tar.gz")
           echo "Built package: $pkg"
           echo "pkg=$pkg" >> $GITHUB_ENV
 

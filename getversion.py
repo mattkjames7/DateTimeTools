@@ -7,7 +7,7 @@ def getversion():
 	'''
 	#get the init file path
 	thispath = os.path.abspath(os.path.dirname(__file__))+'/'
-	initfile = thispath + 'kpindex/__init__.py'
+	initfile = thispath + 'DateTimeTools/__init__.py'
 	
 	#read the file in
 	f = open(initfile,'r')

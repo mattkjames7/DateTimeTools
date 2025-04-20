@@ -26,7 +26,7 @@ pip3 install DateTimeTools
 pip3 install DateTimeTools --no-build-isolation
 ```
 
-NOTE: This module uses a C++ backend, which is compiled with `g++` under Linux (libdatetime.so) and Windows 10 (libdatetime.dll). This code has mostly been tested in Linux (Mint 20ish, CentOS 7) with a very brief test in Windows 10. The precompiled libraries may fail to load under other versions of both operating systems (definitely on Mac, or 32 bit OSes) - if so, then the module will attempt to recompile itself on the host system using `g++`. If recompilation fails, please check that you have `g++` installed -  under Linux install GCC, under Windows install Mingw GCC (I used TDM-GCC, be sure to select `g++`).
+NOTE: This module uses a C++ backend, which is compiled with CMake - please install CMake for your OS before installing this package.
 
 ## Usage
 

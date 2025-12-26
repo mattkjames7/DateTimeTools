@@ -23,7 +23,8 @@ class CustomBuild(build_py):
 				#cmd = ['make', '-C', 'DateTimeTools/__data/datetime']
 				cwd = os.getcwd()
 				os.chdir('DateTimeTools/__data/datetime/')
-				cmd = ["cmake","-DCMAKE_INSTALL_PREFIX=$(pwd)","-B","build"]
+				install_dir = f"{cwd}/DateTimeTools/__data/datetime/"
+				cmd = ["cmake",f"-DCMAKE_INSTALL_PREFIX={install_dir}","-B","build"]
 				subprocess.check_call(cmd, stderr=subprocess.STDOUT)
 				cmd = ["cmake","--build","build"]
 				subprocess.check_call(cmd, stderr=subprocess.STDOUT)

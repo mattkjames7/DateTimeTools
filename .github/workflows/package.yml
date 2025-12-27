@@ -95,7 +95,7 @@ jobs:
 
       
   build_windows:
-    if: ${{ github.event_name != 'push' || inputs.windows }}
+    if: ${{ github.event_name == 'push' || inputs.windows }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -178,7 +178,7 @@ jobs:
 
 
   build_macos:
-    if: ${{ github.event_name == 'push' || inputs.macos }}
+    if: ${{ github.event_name != 'push' || inputs.macos }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:

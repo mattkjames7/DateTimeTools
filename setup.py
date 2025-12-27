@@ -73,8 +73,8 @@ setup(
 	long_description=long_description,
 	long_description_content_type="text/markdown",
 	url="https://github.com/mattkjames7/DateTimeTools",
-	packages=find_packages(),
-	package_data={"DateTimeTools.__data.datetime": ["*"]},
+	packages=find_packages(include=["DateTimeTools*"]),
+	package_data={"DateTimeTools.__data.datetime": ["*.pyd", "*.so", "*.dll", "*.dylib", "*"]},
 	cmdclass={'build_py': CustomBuild},  
 	classifiers=[
 		"Programming Language :: Python :: 3",

@@ -85,7 +85,7 @@ jobs:
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f  # v6.0.0
         with:
           name: linux-package-${{ matrix.python_version }}
-          path: dist/$pkg
+          path: dist/${{ env.pkg }}
 
       - name: Run pytest
         run: |
@@ -164,7 +164,7 @@ jobs:
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f  # v6.0.0
         with:
           name: windows-package-${{ matrix.python_version }}
-          path: dist/$pkg
+          path: dist/${{ env.pkg }}
 
       - name: Run pytest
         shell: msys2 {0}
@@ -213,7 +213,7 @@ jobs:
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f  # v6.0.0
         with:
           name: macos-package-${{ matrix.python_version }}-on-${{ matrix.os }}
-          path: dist/$pkg
+          path: dist/${{ env.pkg }}
       
       - name: Run pytest
         run: |

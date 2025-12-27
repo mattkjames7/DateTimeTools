@@ -4,6 +4,7 @@ from setuptools.command.build_py import build_py
 import subprocess
 import os
 import platform
+import shutil
 
 
 class CustomBuild(build_py):
@@ -22,6 +23,12 @@ class CustomBuild(build_py):
 			subprocess.check_call(cmd, stderr=subprocess.STDOUT)
 			cmd = ["cmake","--install","build"]
 			subprocess.check_call(cmd, stderr=subprocess.STDOUT)
+
+			if platform.system() == 'Windows':
+				# move DLL to lib subdirectory
+				old_path = f"{install_dir}/bin/libdatetime.dll"
+				new_path = f"{install_dir}/lib/libdatetime.dll"
+				shutil.move(old_path, new_path)
 			
 			os.chdir(cwd)
 		except subprocess.CalledProcessError as e:
@@ -67,7 +74,7 @@ setup(
 	long_description_content_type="text/markdown",
 	url="https://github.com/mattkjames7/DateTimeTools",
 	packages=find_packages(),
-	package_data={'datetime': ['**/*']},
+	package_data={"DateTimeTools.__data.datetime": ["*"]},
 	cmdclass={'build_py': CustomBuild},  
 	classifiers=[
 		"Programming Language :: Python :: 3",

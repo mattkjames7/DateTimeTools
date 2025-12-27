@@ -170,7 +170,7 @@ jobs:
         shell: msys2 {0}
         run: |
           export PATH="$(cygpath -u "$pythonLocation"):$PATH"
-          pip install dist/$pkg pytest
+          python -m pip install dist/$pkg pytest
           cd tests  # so that it doesn't try to import the local directory
           pytest .
         env:

@@ -67,7 +67,7 @@ jobs:
       - name: Build Linux Package
         id: build_linux
         run: |
-          python setup.py sdist bdist_wheel
+          python setup.py bdist_wheel
           pkg=$(ls dist/)
           echo "Built Linux package: $pkg"
           echo "pkg=$pkg" >> $GITHUB_ENV
@@ -152,7 +152,7 @@ jobs:
         shell: msys2 {0}
         run: |
           export PATH="$(cygpath -u "$pythonLocation"):$PATH"
-          python setup.py sdist bdist_wheel
+          python setup.py bdist_wheel
           pkg=$(ls dist/)
           echo "Built Windows package: $pkg"
           echo "pkg=$pkg" >> $GITHUB_ENV
@@ -204,7 +204,7 @@ jobs:
       - name: Build macOS Package
         id: build_macos
         run: |
-          python setup.py sdist bdist_wheel
+          python setup.py bdist_wheel
           pkg=$(ls dist/)
           echo "Built macOS package: $pkg"
           echo "pkg=$pkg" >> $GITHUB_ENV

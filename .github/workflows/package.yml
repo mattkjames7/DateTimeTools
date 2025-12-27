@@ -172,7 +172,7 @@ jobs:
           export PATH="$(cygpath -u "$pythonLocation"):$PATH"
           python -m pip install dist/$pkg pytest
           cd tests  # so that it doesn't try to import the local directory
-          pytest .
+          python -m pytest .
         env:
           pythonLocation: ${{ env.pythonLocation }}
 

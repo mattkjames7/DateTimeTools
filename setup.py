@@ -13,25 +13,17 @@ class CustomBuild(build_py):
 
 	def target_build(self):
 		try:
-			if platform.system() == 'Windows':
-				cwd = os.getcwd()
-				os.chdir('DateTimeTools/__data/datetime/')
-				cmd = ['cmd','/c','compile.bat']
-				subprocess.check_call(cmd, stderr=subprocess.STDOUT)
-				os.chdir(cwd)
-			else:
-				#cmd = ['make', '-C', 'DateTimeTools/__data/datetime']
-				cwd = os.getcwd()
-				os.chdir('DateTimeTools/__data/datetime/')
-				install_dir = f"{cwd}/DateTimeTools/__data/datetime/"
-				cmd = ["cmake",f"-DCMAKE_INSTALL_PREFIX={install_dir}","-B","build"]
-				subprocess.check_call(cmd, stderr=subprocess.STDOUT)
-				cmd = ["cmake","--build","build"]
-				subprocess.check_call(cmd, stderr=subprocess.STDOUT)
-				cmd = ["cmake","--install","build"]
-				subprocess.check_call(cmd, stderr=subprocess.STDOUT)
-				
-				os.chdir(cwd)
+			cwd = os.getcwd()
+			os.chdir('DateTimeTools/__data/datetime/')
+			install_dir = f"{cwd}/DateTimeTools/__data/datetime/"
+			cmd = ["cmake",f"-DCMAKE_INSTALL_PREFIX={install_dir}","-B","build"]
+			subprocess.check_call(cmd, stderr=subprocess.STDOUT)
+			cmd = ["cmake","--build","build"]
+			subprocess.check_call(cmd, stderr=subprocess.STDOUT)
+			cmd = ["cmake","--install","build"]
+			subprocess.check_call(cmd, stderr=subprocess.STDOUT)
+			
+			os.chdir(cwd)
 		except subprocess.CalledProcessError as e:
 			print("Compilation failed with the following output:")
 			print(e.output)

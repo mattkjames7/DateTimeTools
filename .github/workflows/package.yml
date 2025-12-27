@@ -41,7 +41,7 @@ on:
 
 jobs:
   build_linux:
-    if: ${{ github.event_name == 'push' || inputs.linux }}
+    if: ${{ github.event_name != 'push' || inputs.linux }}
     runs-on: ubuntu-24.04
     strategy:
       matrix:
@@ -178,7 +178,7 @@ jobs:
 
 
   build_macos:
-    if: ${{ github.event_name != 'push' || inputs.macos }}
+    if: ${{ github.event_name == 'push' || inputs.macos }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:

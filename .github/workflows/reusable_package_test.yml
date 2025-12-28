@@ -55,10 +55,6 @@ jobs:
       - name: Build Linux Package
         id: build_linux
         run: |
-          unset CFLAGS CXXFLAGS LDFLAGS CPPFLAGS
-          export CC=gcc
-          export CXX=g++
-
           python setup.py bdist_wheel
           pkg=$(ls dist/)
           echo "Built Linux package: $pkg"

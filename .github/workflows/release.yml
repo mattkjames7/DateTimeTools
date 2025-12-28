@@ -65,7 +65,7 @@ jobs:
           git push origin "$tag"
 
   build_linux:
-      needs: get_version
+      needs: [tag, get_version]
       uses: ./.github/workflows/reusable_package_test.yml
       strategy:
           matrix:
@@ -79,7 +79,7 @@ jobs:
           source: false
 
   build_windows:
-      needs: get_version
+      needs: [tag, get_version]
       uses: ./.github/workflows/reusable_package_test.yml
       strategy:
           matrix:
@@ -95,7 +95,7 @@ jobs:
           source: false
   
   build_macos:
-      needs: get_version
+      needs: [tag, get_version]
       uses: ./.github/workflows/reusable_package_test.yml
       strategy:
           matrix:
@@ -111,7 +111,7 @@ jobs:
           source: false
 
   build_source:
-      needs: get_version
+      needs: [tag, get_version]
       uses: ./.github/workflows/reusable_package_test.yml
       with:
           python_version: "3.14"
@@ -122,7 +122,7 @@ jobs:
 
           
   release:
-    needs: [get_version, build_linux, build_windows, build_macos, build_source]
+    needs: [tag, get_version, build_linux, build_windows, build_macos, build_source]
     runs-on: ubuntu-latest
     steps:
       - name: Download all artifacts

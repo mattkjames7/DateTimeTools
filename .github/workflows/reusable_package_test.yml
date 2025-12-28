@@ -60,14 +60,14 @@ jobs:
           echo "Built Linux package: $pkg"
           echo "pkg=$pkg" >> $GITHUB_ENV
       
-      # - name: Auditwheel
-      #   run: |
-      #     python -m pip install auditwheel
-      #     auditwheel repair dist/$pkg --wheel-dir dist/
-      #     rm dist/$pkg
-      #     new_pkg=$(ls dist/)
-      #     echo "Repaired Linux package: $new_pkg"
-      #     echo "pkg=$new_pkg" >> $GITHUB_ENV
+      - name: Auditwheel
+        run: |
+          python -m pip install auditwheel
+          auditwheel repair dist/$pkg --wheel-dir dist/
+          rm dist/$pkg
+          new_pkg=$(ls dist/)
+          echo "Repaired Linux package: $new_pkg"
+          echo "pkg=$new_pkg" >> $GITHUB_ENV
       
       - name: Upload Linux Package
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f  # v6.0.0

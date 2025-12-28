@@ -1,1 +1,4 @@
-recursive-include DateTimeTools/__data/datetime *
+graft DateTimeTools/__data/datetime
+global-exclude *.o *.obj *.a *.lib *.so *.pyd *.dll *.dylib
+global-exclude CMakeFiles CMakeCache.txt cmake_install.cmake Makefile
+global-exclude __pycache__ *.pyc .DS_Store

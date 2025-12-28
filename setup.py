@@ -90,7 +90,9 @@ def getversion():
 version = getversion()
 
 ext_modules = [
-    Extension("DateTimeTools._wheelstub", ["DateTimeTools/_wheelstub.c"])
+    Extension("DateTimeTools._wheelstub", ["DateTimeTools/_wheelstub.c"],
+  	extra_compile_args=["-O2", "-fno-lto"],
+  	extra_link_args=["-Wl,--no-as-needed"],)
 ]
 
 setup(

@@ -5,6 +5,13 @@ import subprocess
 import os
 import platform
 import shutil
+from wheel.bdist_wheel import bdist_wheel as _bdist_wheel
+
+
+class bdist_wheel(_bdist_wheel):
+    def finalize_options(self):
+        super().finalize_options()
+        self.root_is_pure = False  # mark as non-pure => platform wheel
 
 
 class CustomBuild(build_py):
@@ -75,7 +82,7 @@ setup(
 	url="https://github.com/mattkjames7/DateTimeTools",
 	packages=find_packages(include=["DateTimeTools*"]),
 	package_data={"DateTimeTools.__data.datetime": ["*.pyd", "*.so", "*.dll", "*.dylib", "*"]},
-	cmdclass={'build_py': CustomBuild},  
+	cmdclass={"bdist_wheel": bdist_wheel, 'build_py': CustomBuild},  
 	classifiers=[
 		"Programming Language :: Python :: 3",
 		"License :: OSI Approved :: MIT License",

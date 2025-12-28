@@ -83,6 +83,7 @@ jobs:
 
       
   build_windows:
+    name: Build Windows Package (Python ${{ inputs.python_version }})
     if: ${{ inputs.windows }}
     runs-on: ${{ inputs.os-version != '' && inputs.os-version || 'windows-2025' }}
     steps:
@@ -160,6 +161,7 @@ jobs:
 
 
   build_macos:
+    name: Build macOS Package (Python ${{ inputs.python_version }})
     if: ${{ inputs.macos }}
     runs-on: ${{ inputs.os-version != '' && inputs.os-version || 'macos-15' }}
     steps:
@@ -199,6 +201,7 @@ jobs:
           pytest .
 
   build_source:
+    name: Build Source Package
     if: ${{ inputs.source }}
     runs-on: ubuntu-24.04
     steps:

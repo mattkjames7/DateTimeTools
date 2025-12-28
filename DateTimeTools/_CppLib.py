@@ -15,8 +15,6 @@ def getLibFilename(isShort=False):
 	Returns
 	=======
 	libFilename	: str
-		Filename of the CONFLICT (content): Merge conflict in DateTimeTools/_CFunctions.py
-source library
 	
 	"""
 	if(isShort):

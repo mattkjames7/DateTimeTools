@@ -4,6 +4,7 @@ on:
   schedule:
     - cron: '0 0 1 * *'  # Runs at midnight UTC on the 1st of every month
 
+run-name: Monthly Package and Test DateTimeTools
 jobs:
   package_and_test:
     uses: ./.github/workflows/reusable_package_test.yml

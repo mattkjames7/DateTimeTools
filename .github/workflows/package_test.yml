@@ -32,8 +32,10 @@ on:
                 description: "Build Source package"
                 default: false
 
+run-name: Package and Test DateTimeTools
 jobs:
     manual_test:
+        name: Manual Test Single Python Version
         if: ${{ github.event_name == 'workflow_dispatch' && inputs.python_version != 'all' }}
         uses: ./.github/workflows/reusable_package_test.yml
         with:
@@ -44,6 +46,7 @@ jobs:
             source: ${{ github.event.inputs.source }}
 
     manual_test_all:
+        name: Manual Test All Python Versions
         if: ${{ github.event_name == 'workflow_dispatch' && inputs.python_version == 'all' }}
         uses: ./.github/workflows/reusable_package_test.yml
         strategy:
@@ -58,6 +61,7 @@ jobs:
             source: ${{ github.event.inputs.source }}
             
     pull_request:
+        name: Pull Request Test All Python Versions
         if: github.event_name == 'pull_request'
         uses: ./.github/workflows/reusable_package_test.yml
         strategy:
@@ -67,7 +71,6 @@ jobs:
         with:
             python_version: "${{ matrix.python_version }}"
             linux: true
-            windows: false
-            macos: false
-            source: false
-            
+            windows: true
+            macos: true
+            source: true

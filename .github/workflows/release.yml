@@ -13,6 +13,8 @@ on:
         description: "Publish to Test PyPI"
         default: false
 
+run-name: Release DateTimeTools Package
+
 jobs:
   get_version:
     runs-on: ubuntu-latest

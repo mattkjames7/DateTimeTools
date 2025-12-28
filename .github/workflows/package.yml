@@ -95,12 +95,12 @@ jobs:
 
       
   build_windows:
-    if: ${{ github.event_name == 'push' || inputs.windows }}
+    if: ${{ github.event_name != 'push' || inputs.windows }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [windows-2025]
-        python_version: ["3.14"]
+        os: [windows-2022, windows-2025]
+        python_version: ["3.10","3.11","3.12","3.13","3.14"]
       fail-fast: false
     
     steps:
@@ -178,12 +178,12 @@ jobs:
 
 
   build_macos:
-    if: ${{ github.event_name != 'push' || inputs.macos }}
+    if: ${{ github.event_name == 'push' || inputs.macos }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macos-14, macos-15]  
-        python_version: ["3.10","3.11","3.12","3.13","3.14"]
+        os: [macos-15]  
+        python_version: ["3.14"]
       fail-fast: false
     steps:
       - name: Checkout Code

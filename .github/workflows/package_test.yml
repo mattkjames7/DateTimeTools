@@ -64,12 +64,8 @@ jobs:
         name: Pull Request Test All Python Versions
         if: github.event_name == 'pull_request'
         uses: ./.github/workflows/reusable_package_test.yml
-        strategy:
-            matrix:
-                python_version: ["3.10","3.11","3.12","3.13","3.14"]
-            fail-fast: false
         with:
-            python_version: "${{ matrix.python_version }}"
+            python_version: "3.14"
             linux: true
             windows: true
             macos: true

@@ -241,7 +241,7 @@ jobs:
           docker_image="datetimetools:${pyref}"
           echo "Docker image: ${docker_image}"
           echo "docker_image=${docker_image}" >> $GITHUB_ENV
-          docker build --build-arg PYTHON_VERSION=${pyver} -t $docker_image
+          docker build --build-arg PYTHON_VERSION=${pyver} -t $docker_image .
       
       - name: Run Docker Image
         run: |

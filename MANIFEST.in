@@ -1,1 +1,3 @@
-recursive-include DateTimeTools/__data/datetime *
+include DateTimeTools/__data/datetime/lib/libdatetime.so*
+include DateTimeTools/__data/datetime/lib/libdatetime.dylib*
+include DateTimeTools/__data/datetime/lib/libdatetime.dll*

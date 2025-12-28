@@ -84,7 +84,7 @@ jobs:
       strategy:
           matrix:
               python_version: ["3.10","3.11","3.12","3.13","3.14"]
-              os-version: ["windows-2022","windows-2025"]
+              os-version: ["windows-2025"]
           fail-fast: false
       with:
           python_version: "${{ matrix.python_version }}"

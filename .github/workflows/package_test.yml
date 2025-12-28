@@ -40,10 +40,10 @@ jobs:
         uses: ./.github/workflows/reusable_package_test.yml
         with:
             python_version: ${{ github.event.inputs.python_version }}
-            linux: ${{ github.event.inputs.linux }}
-            windows: ${{ github.event.inputs.windows }}
-            macos: ${{ github.event.inputs.macos }}
-            source: ${{ github.event.inputs.source }}
+            linux: ${{ inputs.linux }}
+            windows: ${{ inputs.windows }}
+            macos: ${{ inputs.macos }}
+            source: ${{ inputs.source }}
 
     manual_test_all:
         name: Manual Test All Python Versions
@@ -55,10 +55,10 @@ jobs:
                 python_version: ["3.10","3.11","3.12","3.13","3.14"]
         with:
             python_version: "${{ matrix.python_version }}"
-            linux: ${{ github.event.inputs.linux }}
-            windows: ${{ github.event.inputs.windows }}
-            macos: ${{ github.event.inputs.macos }}
-            source: ${{ github.event.inputs.source }}
+            linux: ${{ inputs.linux }}
+            windows: ${{ inputs.windows }}
+            macos: ${{ inputs.macos }}
+            source: ${{ inputs.source }}
             
     pull_request:
         name: Pull Request Test All Python Versions

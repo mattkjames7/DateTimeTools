@@ -3,6 +3,15 @@ name: Release Package
 
 on:
   workflow_dispatch:
+    inputs:
+      publish_pypi:
+        type: boolean
+        description: "Publish to PyPI"
+        default: true
+      test:
+        type: boolean
+        description: "Publish to Test PyPI"
+        default: false
 
 jobs:
   get_version:
@@ -53,65 +62,82 @@ jobs:
           git tag "$tag"
           git push origin "$tag"
 
-  tests:
-    # Use your reusable workflow for manual_test_all
-    needs: tag
-    uses: ./.github/workflows/reusable_package.yml
-    strategy:
-      matrix:
-        python_version: ["3.14"]
-    with:
-      run_tests: "true"
-      python_version: ${{ matrix.python_version }}
+  build_linux:
+      needs: get_version
+      uses: ./.github/workflows/reusable_package_test.yml
+      strategy:
+          matrix:
+              python_version: ["3.10","3.11","3.12","3.13","3.14"]
+          fail-fast: false
+      with:
+          python_version: "${{ matrix.python_version }}"
+          linux: true
+          windows: false
+          macos: false
+          source: false
 
-  build:
-    needs: [tests, get_version]
+  build_windows:
+      needs: get_version
+      uses: ./.github/workflows/reusable_package_test.yml
+      strategy:
+          matrix:
+              python_version: ["3.10","3.11","3.12","3.13","3.14"]
+              os-version: ["windows-2022","windows-2025"]
+          fail-fast: false
+      with:
+          python_version: "${{ matrix.python_version }}"
+          linux: false
+          windows: true
+          macos: false
+          os-version: "${{ matrix['os-version'] }}"
+          source: false
+  
+  build_macos:
+      needs: get_version
+      uses: ./.github/workflows/reusable_package_test.yml
+      strategy:
+          matrix:
+              python_version: ["3.10","3.11","3.12","3.13","3.14"]
+              os-version: ["macos-14","macos-15"]
+          fail-fast: false
+      with:
+          python_version: "${{ matrix.python_version }}"
+          linux: false
+          windows: false
+          macos: true
+          os-version: "${{ matrix['os-version'] }}"
+          source: false
+
+  build_source:
+      needs: get_version
+      uses: ./.github/workflows/reusable_package_test.yml
+      with:
+          python_version: "3.14"
+          linux: false
+          windows: false
+          macos: false
+          source: true
+
+          
+  release:
+    needs: [get_version, build_linux, build_windows, build_macos, build_source]
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout current branch
-        uses: actions/checkout@v4
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
         with:
-          ref: master
-          submodules: recursive
+          # omit ‘name’ to fetch *every* artifact uploaded earlier
+          path: ./downloaded-artifacts
 
-      - name: Set up Docker Buildx
-        id: buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Build Docker Image
+      - name: Move Artifacts
         run: |
-          # Use a default python version for the Docker target – adjust if needed.
-          pyver="3.14"
-          pyref="py${pyver//./}"
-          docker_image="datetimetools:${pyref}"
-          echo "Docker image: ${docker_image}"
-          echo "docker_image=${docker_image}" >> $GITHUB_ENV
-          docker build --build-arg PYTHON_VERSION=${pyver} -t $docker_image .
+          mkdir -p dist
+          mv -v downloaded-artifacts/*/* dist/
 
-      - name: Run Docker Container
+      - name: Show contents
         run: |
-          echo "docker_image is '${{ env.docker_image }}'"
-          docker_container=dttest
-          echo "docker_container=$docker_container" >> $GITHUB_ENV
-          # Run container without --rm so we can interact with it
-          docker run --name $docker_container -d ${{ env.docker_image }}
+          ls dist/
 
-      - name: Build Package
-        id: build_pkg
-        run: |
-          # Build the package inside the container
-          docker exec -u ubuntu ${{ env.docker_container }} bash -c "cd /DateTimeTools && source /app/venv/bin/activate && python setup.py sdist"
-          # Find the generated wheel (assumes there's only one)
-          pkg=$(docker exec -u ubuntu ${{ env.docker_container }} bash -c "cd /DateTimeTools/dist && ls *.tar.gz")
-          echo "Built package: $pkg"
-          echo "pkg=$pkg" >> $GITHUB_ENV
-
-      - name: Copy Package to Workspace
-        run: |
-          echo "Copying package: ${{ env.pkg }}"
-          docker cp ${{ env.docker_container }}:/DateTimeTools/dist/${{ env.pkg }} .
-          ls -la .
-          
       - name: Create GitHub Release
         id: create_release
         uses: actions/create-release@v1
@@ -124,23 +150,26 @@ jobs:
           prerelease: false
 
       - name: Upload Package to Release
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: svenstaro/upload-release-action@6b7fa9f267e90b50a19fef07b3596790bb941741  # v2.11.3
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./${{ env.pkg }}
-          asset_name: ${{ env.pkg }}
-          asset_content_type: application/octet-stream
-
-      - name: Prepare Package for PyPI
-        run: |
-          mkdir -p dist
-          mv ${{ env.pkg }} dist/
-          ls -la dist
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: dist/*
+          tag: ${{ github.ref }}
+          overwrite: true
+          file_glob: true
 
       - name: Publish Package to PyPI
-        uses: pypa/gh-action-pypi-publish@v1.13.0
+        if: ${{ inputs.publish_pypi == true && inputs.test == false }}
+        uses: pypa/gh-action-pypi-publish@v1.4.2
         with:
           user: __token__
           password: ${{ secrets.PYPI_API_TOKEN }}
+
+      - name: Publish Package to PyPI (TEST)
+        if: ${{ inputs.publish_pypi == true && inputs.test }}
+        uses: pypa/gh-action-pypi-publish@v1.4.2
+        with:
+          user: __token__
+          password: ${{ secrets.TEST_PYPI_API_TOKEN }}
+          repository_url: https://test.pypi.org/legacy/
+          verbose: true

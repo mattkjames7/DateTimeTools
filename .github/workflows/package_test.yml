@@ -1,9 +1,6 @@
 name: "Package Test"
 
 on: 
-    push:
-        tags:
-        - "v*.*.*"
     pull_request:
     workflow_dispatch:
         inputs:
@@ -12,53 +9,65 @@ on:
                 description: "Python version to run package test on"
                 default: "3.14"
                 options:
+                    - "all"
                     - "3.10"
                     - "3.11"
                     - "3.12"
                     - "3.13"
                     - "3.14"
-            run_tests:
+            linux:
                 type: boolean
-                description: "Run tests"
+                description: "Build Linux package"
                 default: true
-            run_all:
+            windows:
                 type: boolean
-                description: "Run all tests"
+                description: "Build Windows package"
+                default: false
+            macos:
+                type: boolean
+                description: "Build macOS package"
+                default: false
+            source:
+                type: boolean
+                description: "Build Source package"
                 default: false
 
 jobs:
     manual_test:
-        if: github.event_name == 'workflow_dispatch' && github.event.inputs.run_all == 'false'
-        uses: ./.github/workflows/reusable_package.yml
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.python_version != 'all' }}
+        uses: ./.github/workflows/reusable_package_test.yml
         with:
             python_version: ${{ github.event.inputs.python_version }}
-            run_tests: "${{ github.event.inputs.run_tests }}"
-
+            linux: ${{ github.event.inputs.linux }}
+            windows: ${{ github.event.inputs.windows }}
+            macos: ${{ github.event.inputs.macos }}
+            source: ${{ github.event.inputs.source }}
 
     manual_test_all:
-        if: github.event_name == 'workflow_dispatch' && github.event.inputs.run_all == 'true'
-        uses: ./.github/workflows/reusable_package.yml
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.python_version == 'all' }}
+        uses: ./.github/workflows/reusable_package_test.yml
         strategy:
             fail-fast: false
             matrix:
                 python_version: ["3.10","3.11","3.12","3.13","3.14"]
         with:
             python_version: "${{ matrix.python_version }}"
-            run_tests: "${{ github.event.inputs.run_tests }}"
+            linux: ${{ github.event.inputs.linux }}
+            windows: ${{ github.event.inputs.windows }}
+            macos: ${{ github.event.inputs.macos }}
+            source: ${{ github.event.inputs.source }}
             
     pull_request:
         if: github.event_name == 'pull_request'
-        uses: ./.github/workflows/reusable_package.yml
+        uses: ./.github/workflows/reusable_package_test.yml
         strategy:
             matrix:
                 python_version: ["3.10","3.11","3.12","3.13","3.14"]
+            fail-fast: false
         with:
             python_version: "${{ matrix.python_version }}"
-            run_tests: "true"
+            linux: true
+            windows: false
+            macos: false
+            source: false
             
-    release:
-        if: github.ref_type == 'tag'
-        uses: ./.github/workflows/reusable_package.yml
-        with:
-            python_version: ${{ github.event.inputs.python_version }}  
-            run_tests: "true"

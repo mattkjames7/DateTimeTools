@@ -15,6 +15,10 @@ on:
         type: boolean
         description: "Build Windows package"
         default: true
+      windows-msvc:
+        type: boolean
+        description: "Build Windows package using MSVC instead of MinGW"
+        default: true
       macos:
         type: boolean
         description: "Build macOS package"
@@ -265,3 +269,67 @@ jobs:
       - name: Cleanup Docker Container
         run: |
           docker rm -f $docker_container || true
+
+
+      
+  build_windows_msvc:
+    name: Build Windows Package (Python ${{ inputs.python_version }})
+    if: ${{ inputs.windows-msvc }}
+    runs-on: ${{ inputs.os-version != '' && inputs.os-version || 'windows-2025' }}
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8  # v6.0.1
+        with:
+          submodules: recursive
+              
+      - name: Set up Windows Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          architecture: x64
+
+      - name: Add Windows Python to PATH
+        shell: pwsh
+        run: |
+          echo "$pythonLocation" >> $GITHUB_PATH
+        env:
+          pythonLocation: ${{ env.pythonLocation }}
+      
+
+      - name: Install Python build tools
+        shell: pwsh
+        run: |
+          $env:PATH="$env:pythonLocation;$env:PATH"
+          python -m pip install --upgrade pip setuptools wheel pyopenssl pytest tzdata
+        env:
+          pythonLocation: ${{ env.pythonLocation }}
+
+      - name: Build Windows Package
+        id: build_windows
+        shell: pwsh
+        run: |
+          $env:PATH="$env:pythonLocation;$env:PATH"
+          python setup.py bdist_wheel
+          $pkg = Get-ChildItem -Path dist | Select-Object -ExpandProperty Name
+          Write-Output "Built Windows package: $pkg"
+          echo "pkg=$pkg" >> $GITHUB_ENV
+        env:
+          pythonLocation: ${{ env.pythonLocation }}
+
+
+      - name: Upload Windows Package
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f  # v6.0.0
+        with:
+          name: windows-package-${{ env.PYTHON_VERSION }}-on-${{ inputs.os-version != '' && inputs.os-version || 'windows-2025' }}
+          path: dist/${{ env.pkg }}
+
+      - name: Run pytest
+        shell: pwsh
+        run: |
+          $env:PATH="$env:pythonLocation;$env:PATH"
+          python -m pip install dist/$pkg pytest
+          cd tests  # so that it doesn't try to import the local directory
+          python -m pytest .
+        env:
+          pythonLocation: ${{ env.pythonLocation }}
+

@@ -25,7 +25,7 @@ on:
                 default: false
             windows-msvc:
                 type: boolean
-                description: "Build Windows package using MSVC instead of MinGW"
+                description: "Build Windows package (MSVC)"
                 default: false
             macos:
                 type: boolean

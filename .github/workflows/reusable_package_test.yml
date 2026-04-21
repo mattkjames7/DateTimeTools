@@ -310,9 +310,9 @@ jobs:
         run: |
           $env:PATH="$env:pythonLocation;$env:PATH"
           python setup.py bdist_wheel
-          $pkg = Get-ChildItem -Path dist | Select-Object -ExpandProperty Name
+          $pkg = (Get-ChildItem -Path dist | Select-Object -ExpandProperty Name)
           Write-Output "Built Windows package: $pkg"
-          echo "pkg=$pkg" >> $GITHUB_ENV
+          echo "pkg=$pkg" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
         env:
           pythonLocation: ${{ env.pythonLocation }}
 

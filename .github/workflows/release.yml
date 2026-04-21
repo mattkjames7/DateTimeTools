@@ -75,6 +75,7 @@ jobs:
           python_version: "${{ matrix.python_version }}"
           linux: true
           windows: false
+          windows-msvc: false
           macos: false
           source: false
 
@@ -90,6 +91,7 @@ jobs:
           python_version: "${{ matrix.python_version }}"
           linux: false
           windows: true
+          windows-msvc: false
           macos: false
           os-version: "${{ matrix['os-version'] }}"
           source: false
@@ -123,6 +125,7 @@ jobs:
           python_version: "${{ matrix.python_version }}"
           linux: false
           windows: false
+          windows-msvc: false
           macos: true
           os-version: "${{ matrix['os-version'] }}"
           source: false
@@ -134,6 +137,7 @@ jobs:
           python_version: "3.14"
           linux: false
           windows: false
+          windows-msvc: false
           macos: false
           source: true
 

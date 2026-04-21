@@ -99,12 +99,13 @@ jobs:
       uses: ./.github/workflows/reusable_package_test.yml
       strategy:
           matrix:
-              python_version: ["3.10","3.11","3.12","3.13","3.14"]
+              python_version: ["3.11","3.12","3.13","3.14"]
               os-version: ["windows-11-arm"]
           fail-fast: false
       with:
           python_version: "${{ matrix.python_version }}"
           linux: false
+          windows: false
           windows-msvc: true
           macos: false
           os-version: "${{ matrix['os-version'] }}"

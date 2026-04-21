@@ -327,7 +327,7 @@ jobs:
         shell: pwsh
         run: |
           $env:PATH="$env:pythonLocation;$env:PATH"
-          python -m pip install dist/$pkg pytest
+          python -m pip install dist/${{ env.pkg }} pytest
           cd tests  # so that it doesn't try to import the local directory
           python -m pytest .
         env:

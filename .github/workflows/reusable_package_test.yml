@@ -130,7 +130,7 @@ jobs:
         shell: msys2 {0}
         run: |
           export PATH="$(cygpath -u "$pythonLocation"):$PATH"
-          python -m pip install --upgrade pip setuptools wheel pyopenssl pytest tzdata
+          python -m pip install --upgrade pip setuptools wheel pytest
         env:
           pythonLocation: ${{ env.pythonLocation }}
 
@@ -300,7 +300,7 @@ jobs:
         shell: pwsh
         run: |
           $env:PATH="$env:pythonLocation;$env:PATH"
-          python -m pip install --upgrade pip setuptools wheel pyopenssl pytest tzdata
+          python -m pip install --upgrade pip setuptools wheel pytest
         env:
           pythonLocation: ${{ env.pythonLocation }}
 

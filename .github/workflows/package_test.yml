@@ -1,131 +1,221 @@
 name: "Package Test"
 
-on: 
-    pull_request:
-    workflow_dispatch:
-        inputs:
-            python_version:
-                type: choice
-                description: "Python version to run package test on"
-                default: "3.14"
-                options:
-                    - "all"
-                    - "3.10"
-                    - "3.11"
-                    - "3.12"
-                    - "3.13"
-                    - "3.14"
-            linux:
-                type: boolean
-                description: "Build Linux package (x86_64)"
-                default: true
-            linux-arm:
-                type: boolean
-                description: "Build Linux package (aarch64)"
-                default: true
-            windows:
-                type: boolean
-                description: "Build Windows package (x86_64, MSYS2)"
-                default: false
-            windows-arm:
-                type: boolean
-                description: "Build Windows package (aarch64, MSYS2)"
-                default: false
-            windows-msvc:
-                type: boolean
-                description: "Build Windows package (x86_64, MSVC)"
-                default: false
-            windows-msvc-arm:
-                type: boolean
-                description: "Build Windows package (aarch64, MSVC)"
-                default: false
-            macos:
-                type: boolean
-                description: "Build macOS package (x86_64)"
-                default: false
-            macos-arm:
-                type: boolean
-                description: "Build macOS package (aarch64)"
-                default: false
-            source:
-                type: boolean
-                description: "Build Source package"
-                default: false
-    workflow_call:
-        inputs:
-            python_version:
-                type: string
-                description: "Python version to run package test on"
-                default: "3.14"
-            linux:
-                type: boolean
-                description: "Build Linux package (x86_64)"
-                default: true
-            linux-arm:
-                type: boolean
-                description: "Build Linux package (aarch64)"
-                default: true
-            windows:
-                type: boolean
-                description: "Build Windows package (x86_64, MSYS2)"
-                default: false
-            windows-arm:
-                type: boolean
-                description: "Build Windows package (aarch64, MSYS2)"
-                default: false
-            windows-msvc:
-                type: boolean
-                description: "Build Windows package (x86_64, MSVC)"
-                default: false
-            windows-msvc-arm:
-                type: boolean
-                description: "Build Windows package (aarch64, MSVC)"
-                default: false
-            macos:
-                type: boolean
-                description: "Build macOS package (x86_64)"
-                default: false
-            macos-arm:
-                type: boolean
-                description: "Build macOS package (aarch64)"
-                default: false
-            source:
-                type: boolean
-                description: "Build Source package"
-                default: false
+on:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      python_version:
+        type: choice
+        description: "Python version to run package test on"
+        default: "3.14"
+        options:
+          - "all"
+          - "3.10"
+          - "3.11"
+          - "3.12"
+          - "3.13"
+          - "3.14"
+      linux:
+        type: boolean
+        description: "Build Linux package (x86_64)"
+        default: true
+      linux-arm:
+        type: boolean
+        description: "Build Linux package (aarch64)"
+        default: true
+      windows:
+        type: boolean
+        description: "Build Windows package (x86_64, MSYS2)"
+        default: false
+      windows-arm:
+        type: boolean
+        description: "Build Windows package (aarch64, MSYS2)"
+        default: false
+      windows-msvc:
+        type: boolean
+        description: "Build Windows package (x86_64, MSVC)"
+        default: false
+      windows-msvc-arm:
+        type: boolean
+        description: "Build Windows package (aarch64, MSVC)"
+        default: false
+      macos:
+        type: boolean
+        description: "Build macOS package (x86_64)"
+        default: false
+      macos-arm:
+        type: boolean
+        description: "Build macOS package (aarch64)"
+        default: false
+      source:
+        type: boolean
+        description: "Build Source package"
+        default: false
+  workflow_call:
+    inputs:
+      python_version:
+        type: string
+        description: "Python version to run package test on"
+        default: "3.14"
+      linux:
+        type: boolean
+        description: "Build Linux package (x86_64)"
+        default: true
+      linux-arm:
+        type: boolean
+        description: "Build Linux package (aarch64)"
+        default: true
+      windows:
+        type: boolean
+        description: "Build Windows package (x86_64, MSYS2)"
+        default: false
+      windows-arm:
+        type: boolean
+        description: "Build Windows package (aarch64, MSYS2)"
+        default: false
+      windows-msvc:
+        type: boolean
+        description: "Build Windows package (x86_64, MSVC)"
+        default: false
+      windows-msvc-arm:
+        type: boolean
+        description: "Build Windows package (aarch64, MSVC)"
+        default: false
+      macos:
+        type: boolean
+        description: "Build macOS package (x86_64)"
+        default: false
+      macos-arm:
+        type: boolean
+        description: "Build macOS package (aarch64)"
+        default: false
+      source:
+        type: boolean
+        description: "Build Source package"
+        default: false
 
 run-name: Package and Test DateTimeTools
+
 jobs:
-    setup_inputs:
-        name: Setup Jobs
-        runs-on: ubuntu-latest
-        steps:
-            - name: Set up job matrix
-              id: setup_matrix
-              run: |
-                python3 .github/scripts/setup_package_test_matrix.py \
-                  --python-version "${{ github.event.inputs.python_version }}" \
-                  --linux "${{ github.event.inputs.linux }}" \
-                  --linux-arm "${{ github.event.inputs.linux-arm }}" \
-                  --windows "${{ github.event.inputs.windows }}" \
-                  --windows-arm "${{ github.event.inputs.windows-arm }}" \
-                  --windows-msvc "${{ github.event.inputs.windows-msvc }}" \
-                  --windows-msvc-arm "${{ github.event.inputs.windows-msvc-arm }}" \
-                  --macos "${{ github.event.inputs.macos }}" \
-                  --macos-arm "${{ github.event.inputs.macos-arm }}" \
-                  --source "${{ github.event.inputs.source }}"
-                
+  setup_inputs:
+    name: Setup Jobs
+    runs-on: ubuntu-latest
+    outputs:
+      linux_enabled: ${{ steps.setup_matrix.outputs.linux_enabled }}
+      linux_matrix: ${{ steps.setup_matrix.outputs.linux_matrix }}
+      macos_enabled: ${{ steps.setup_matrix.outputs.macos_enabled }}
+      macos_matrix: ${{ steps.setup_matrix.outputs.macos_matrix }}
+      source_enabled: ${{ steps.setup_matrix.outputs.source_enabled }}
+      source_matrix: ${{ steps.setup_matrix.outputs.source_matrix }}
+      windows_msvc_enabled: ${{ steps.setup_matrix.outputs.windows_msvc_enabled }}
+      windows_msvc_matrix: ${{ steps.setup_matrix.outputs.windows_msvc_matrix }}
+      windows_msys2_enabled: ${{ steps.setup_matrix.outputs.windows_msys2_enabled }}
+      windows_msys2_matrix: ${{ steps.setup_matrix.outputs.windows_msys2_matrix }}
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8  # v6.0.1
 
+      - name: Set up job matrix
+        id: setup_matrix
+        env:
+          EVENT_TYPE: ${{ github.event_name }}
+          PYTHON_VERSION: ${{ inputs.python_version || '3.14' }}
+          WINDOWS_X86: ${{ inputs.windows || false }}
+          WINDOWS_ARM: ${{ inputs.windows-arm || false }}
+          WINDOWS_X86_MSVC: ${{ inputs.windows-msvc || false }}
+          WINDOWS_ARM_MSVC: ${{ inputs.windows-msvc-arm || false }}
+          LINUX_X86: ${{ inputs.linux || false }}
+          LINUX_ARM: ${{ inputs.linux-arm || false }}
+          MACOS_X86: ${{ inputs.macos || false }}
+          MACOS_ARM: ${{ inputs.macos-arm || false }}
+          SOURCE: ${{ inputs.source || false }}
+        run: |
+          jobs_json=$(python3 .github/scripts/setup_jobs.py \
+            --event_type "$EVENT_TYPE" \
+            --python-version "$PYTHON_VERSION" \
+            --windows-x86 "$WINDOWS_X86" \
+            --windows-arm "$WINDOWS_ARM" \
+            --windows-x86-msvc "$WINDOWS_X86_MSVC" \
+            --windows-arm-msvc "$WINDOWS_ARM_MSVC" \
+            --linux-x86 "$LINUX_X86" \
+            --linux-arm "$LINUX_ARM" \
+            --macos-x86 "$MACOS_X86" \
+            --macos-arm "$MACOS_ARM" \
+            --source "$SOURCE")
 
-    build_linux:
-      needs: setup_inputs
-      if: ${{ needs.setup_inputs.outputs.matrix-linux == 'true' }}
-      uses: ./.github/workflows/build_linux.yml
-      strategy:
-          matrix:
-              python_version: ["3.10","3.11","3.12","3.13","3.14"]
-              arch: ["x86_64", "aarch64"]
-          fail-fast: false
-      with:
-          python_version: "${{ matrix.python_version }}"
-          arch: "${{ matrix.arch }}"
+          echo "jobs_json<<EOF" >> "$GITHUB_OUTPUT"
+          echo "$jobs_json" >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
+
+          JOBS_JSON="$jobs_json" python3 - <<'PY' >> "$GITHUB_OUTPUT"
+          import json
+          import os
+
+          jobs = json.loads(os.environ["JOBS_JSON"])
+          keys = [
+              ("linux", "linux"),
+              ("macos", "macos"),
+              ("source", "source"),
+              ("windows-msvc", "windows_msvc"),
+              ("windows-msys2", "windows_msys2"),
+          ]
+
+          for key, prefix in keys:
+              entries = jobs.get(key, [])
+              print(f"{prefix}_enabled={'true' if entries else 'false'}")
+              print(f"{prefix}_matrix={json.dumps({'include': entries}, separators=(',', ':'))}")
+          PY
+
+  build_linux:
+    needs: setup_inputs
+    if: ${{ needs.setup_inputs.outputs.linux_enabled == 'true' }}
+    uses: ./.github/workflows/build_linux.yml
+    strategy:
+      matrix: ${{ fromJson(needs.setup_inputs.outputs.linux_matrix) }}
+      fail-fast: false
+    with:
+      python_version: ${{ matrix.python_version }}
+      arch: ${{ matrix.arch }}
+
+  build_macos:
+    needs: setup_inputs
+    if: ${{ needs.setup_inputs.outputs.macos_enabled == 'true' }}
+    uses: ./.github/workflows/build_macos.yml
+    strategy:
+      matrix: ${{ fromJson(needs.setup_inputs.outputs.macos_matrix) }}
+      fail-fast: false
+    with:
+      python_version: ${{ matrix.python_version }}
+      arch: ${{ matrix.arch }}
+
+  build_source:
+    needs: setup_inputs
+    if: ${{ needs.setup_inputs.outputs.source_enabled == 'true' }}
+    uses: ./.github/workflows/build_source.yml
+    strategy:
+      matrix: ${{ fromJson(needs.setup_inputs.outputs.source_matrix) }}
+      fail-fast: false
+    with:
+      python_version: ${{ matrix.python_version }}
+
+  build_windows_msvc:
+    needs: setup_inputs
+    if: ${{ needs.setup_inputs.outputs.windows_msvc_enabled == 'true' }}
+    uses: ./.github/workflows/build_windows_msvc.yml
+    strategy:
+      matrix: ${{ fromJson(needs.setup_inputs.outputs.windows_msvc_matrix) }}
+      fail-fast: false
+    with:
+      python_version: ${{ matrix.python_version }}
+      arch: ${{ matrix.arch }}
+
+  build_windows_msys2:
+    needs: setup_inputs
+    if: ${{ needs.setup_inputs.outputs.windows_msys2_enabled == 'true' }}
+    uses: ./.github/workflows/build_windows_msys2.yml
+    strategy:
+      matrix: ${{ fromJson(needs.setup_inputs.outputs.windows_msys2_matrix) }}
+      fail-fast: false
+    with:
+      python_version: ${{ matrix.python_version }}
+      arch: ${{ matrix.arch }}

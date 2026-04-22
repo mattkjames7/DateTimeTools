@@ -64,86 +64,23 @@ jobs:
           git tag "$tag"
           git push origin "$tag"
 
-  build_linux:
-      needs: [tag, get_version]
-      uses: ./.github/workflows/reusable_package_test.yml
-      strategy:
-          matrix:
-              python_version: ["3.10","3.11","3.12","3.13","3.14"]
-          fail-fast: false
-      with:
-          python_version: "${{ matrix.python_version }}"
-          linux: true
-          windows: false
-          windows-msvc: false
-          macos: false
-          source: false
-
-  build_windows:
-      needs: [tag, get_version]
-      uses: ./.github/workflows/reusable_package_test.yml
-      strategy:
-          matrix:
-              python_version: ["3.10","3.11","3.12","3.13","3.14"]
-              os-version: ["windows-2025"]
-          fail-fast: false
-      with:
-          python_version: "${{ matrix.python_version }}"
-          linux: false
-          windows: true
-          windows-msvc: false
-          macos: false
-          os-version: "${{ matrix['os-version'] }}"
-          source: false
-
-  build_windows_msvc:
-      needs: [tag, get_version]
-      uses: ./.github/workflows/reusable_package_test.yml
-      strategy:
-          matrix:
-              python_version: ["3.11","3.12","3.13","3.14"]
-              os-version: ["windows-11-arm"]
-          fail-fast: false
-      with:
-          python_version: "${{ matrix.python_version }}"
-          linux: false
-          windows: false
-          windows-msvc: true
-          macos: false
-          os-version: "${{ matrix['os-version'] }}"
-          source: false
-  
-  build_macos:
-      needs: [tag, get_version]
-      uses: ./.github/workflows/reusable_package_test.yml
-      strategy:
-          matrix:
-              python_version: ["3.10","3.11","3.12","3.13","3.14"]
-              os-version: ["macos-14","macos-15"]
-          fail-fast: false
-      with:
-          python_version: "${{ matrix.python_version }}"
-          linux: false
-          windows: false
-          windows-msvc: false
-          macos: true
-          os-version: "${{ matrix['os-version'] }}"
-          source: false
-
-  build_source:
-      needs: [tag, get_version]
-      uses: ./.github/workflows/reusable_package_test.yml
-      with:
-          python_version: "3.14"
-          linux: false
-          windows: false
-          windows-msvc: false
-          macos: false
-          source: true
-
+  build_packages:
+    uses: ./.github/workflows/package_test.yml
+    needs: [get_version, tag]
+    with:
+      python_version: "all"
+      linux: true
+      linux-arm: true
+      windows: false
+      windows-arm: false
+      windows-msvc: true
+      windows-msvc-arm: true
+      macos: true
+      macos-arm: true
+      source: true
           
   release:
-    needs: [tag, get_version, build_linux, build_windows, build_macos, build_source]
+    needs: [tag, get_version, build_packages]
     runs-on: ubuntu-latest
     steps:
       - name: Download all artifacts

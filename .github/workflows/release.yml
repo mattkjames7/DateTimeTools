@@ -72,7 +72,6 @@ jobs:
       linux: true
       linux-arm: true
       windows: false
-      windows-arm: false
       windows-msvc: true
       windows-msvc-arm: true
       macos: true

@@ -51,37 +51,54 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
 
-      - name: Install Build Dependencies
+      - name: Select manylinux Python tag
         run: |
-          python -m pip install --upgrade pip build wheel
-          sudo apt install -y build-essential g++ cmake ninja-build
-      
-      - name: Build Linux Package
+          case "${{ env.PYTHON_VERSION }}" in
+            "3.10") echo "MANYLINUX_PYTAG=cp310-cp310" >> "$GITHUB_ENV" ;;
+            "3.11") echo "MANYLINUX_PYTAG=cp311-cp311" >> "$GITHUB_ENV" ;;
+            "3.12") echo "MANYLINUX_PYTAG=cp312-cp312" >> "$GITHUB_ENV" ;;
+            "3.13") echo "MANYLINUX_PYTAG=cp313-cp313" >> "$GITHUB_ENV" ;;
+            "3.14") echo "MANYLINUX_PYTAG=cp314-cp314" >> "$GITHUB_ENV" ;;
+            *)
+              echo "Unsupported python-version: ${{ env.PYTHON_VERSION }}"
+              exit 1
+              ;;
+          esac
+
+      - name: Build and repair wheel in manylinux container
         id: build_linux
         run: |
-          python -m build --wheel -o dist
-          pkg=$(basename "$(ls dist/*.whl)")
+          rm -rf dist wheelhouse
+          mkdir -p dist wheelhouse
+
+          docker run --rm \
+            -e PYTAG="${MANYLINUX_PYTAG}" \
+            -v "${{ github.workspace }}:/io" \
+            -w /io \
+            quay.io/pypa/manylinux_2_34:latest \
+            /bin/bash -lc '
+              set -euo pipefail
+              if ! command -v cmake >/dev/null 2>&1; then
+                dnf install -y cmake gcc gcc-c++ make ninja-build
+              fi
+              "/opt/python/${PYTAG}/bin/python" -m pip install --upgrade pip setuptools wheel build auditwheel
+              "/opt/python/${PYTAG}/bin/python" -m build --wheel -o dist
+              auditwheel repair dist/*.whl -w wheelhouse
+            '
+
+          pkg=$(basename "$(ls wheelhouse/*.whl)")
           echo "Built Linux package: $pkg"
           echo "pkg=$pkg" >> $GITHUB_ENV
-      
-      - name: Auditwheel
-        run: |
-          python -m pip install auditwheel
-          auditwheel repair dist/$pkg --wheel-dir dist/
-          rm dist/$pkg
-          new_pkg=$(ls dist/)
-          echo "Repaired Linux package: $new_pkg"
-          echo "pkg=$new_pkg" >> $GITHUB_ENV
       
       - name: Upload Linux Package
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f  # v6.0.0
         with:
           name: linux-package-${{ env.PYTHON_VERSION }}
-          path: dist/*.whl
+          path: wheelhouse/*.whl
 
       - name: Run pytest
         run: |
-          pip install dist/$pkg pytest
+          pip install wheelhouse/*.whl pytest
           cd tests  # so that it doesn't try to import the local directory
           pytest .
 
@@ -324,13 +341,15 @@ jobs:
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f  # v6.0.0
         with:
           name: windows-package-${{ env.PYTHON_VERSION }}-on-${{ inputs.os-version != '' && inputs.os-version || 'windows-11-arm' }}
-          path: dist/${{ env.pkg }}
+          path: dist/*.whl
 
       - name: Run pytest
         shell: pwsh
         run: |
           $env:PATH="$env:pythonLocation;$env:PATH"
-          python -m pip install dist/${{ env.pkg }} pytest
+          $wheel = Get-ChildItem -Path dist -Filter *.whl | Select-Object -First 1
+          if (-not $wheel) { throw "No wheel found in dist/" }
+          python -m pip install $wheel.FullName pytest
           cd tests  # so that it doesn't try to import the local directory
           python -m pytest .
         env:

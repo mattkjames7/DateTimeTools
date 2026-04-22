@@ -53,14 +53,14 @@ jobs:
 
       - name: Install Build Dependencies
         run: |
-          python -m pip install --upgrade pip setuptools wheel
+          python -m pip install --upgrade pip build wheel
           sudo apt install -y build-essential g++ cmake ninja-build
       
       - name: Build Linux Package
         id: build_linux
         run: |
-          python setup.py bdist_wheel
-          pkg=$(ls dist/)
+          python -m build --wheel -o dist
+          pkg=$(basename "$(ls dist/*.whl)")
           echo "Built Linux package: $pkg"
           echo "pkg=$pkg" >> $GITHUB_ENV
       
@@ -77,7 +77,7 @@ jobs:
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f  # v6.0.0
         with:
           name: linux-package-${{ env.PYTHON_VERSION }}
-          path: dist/${{ env.pkg }}
+          path: dist/*.whl
 
       - name: Run pytest
         run: |
@@ -130,7 +130,7 @@ jobs:
         shell: msys2 {0}
         run: |
           export PATH="$(cygpath -u "$pythonLocation"):$PATH"
-          python -m pip install --upgrade pip setuptools wheel pytest
+          python -m pip install --upgrade pip build wheel pytest
         env:
           pythonLocation: ${{ env.pythonLocation }}
 
@@ -139,8 +139,8 @@ jobs:
         shell: msys2 {0}
         run: |
           export PATH="$(cygpath -u "$pythonLocation"):$PATH"
-          python setup.py bdist_wheel
-          pkg=$(ls dist/)
+          python -m build --wheel -o dist
+          pkg=$(basename "$(ls dist/*.whl)")
           echo "Built Windows package: $pkg"
           echo "pkg=$pkg" >> $GITHUB_ENV
         env:
@@ -151,7 +151,7 @@ jobs:
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f  # v6.0.0
         with:
           name: windows-package-${{ env.PYTHON_VERSION }}-on-${{ inputs.os-version != '' && inputs.os-version || 'windows-2025' }}
-          path: dist/${{ env.pkg }}
+          path: dist/*.whl
 
       - name: Run pytest
         shell: msys2 {0}
@@ -181,14 +181,17 @@ jobs:
 
       - name: Install Build Dependencies
         run: |
-          python -m pip install --upgrade pip setuptools wheel
+          python -m pip install --upgrade pip build wheel
           brew install cmake ninja
       
       - name: Build macOS Package
         id: build_macos
         run: |
-          python setup.py bdist_wheel
-          pkg=$(ls dist/)
+          export CMAKE_OSX_ARCHITECTURES="$(uname -m)"
+          export CMAKE_OSX_DEPLOYMENT_TARGET="11.0"
+          export MACOSX_DEPLOYMENT_TARGET="11.0"
+          python -m build --wheel -o dist
+          pkg=$(basename "$(ls dist/*.whl)")
           echo "Built macOS package: $pkg"
           echo "pkg=$pkg" >> $GITHUB_ENV
       
@@ -196,7 +199,7 @@ jobs:
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f  # v6.0.0
         with:
           name: macos-package-${{ env.PYTHON_VERSION }}-on-${{ inputs.os-version != '' && inputs.os-version || 'macos-15' }}
-          path: dist/${{ env.pkg }}
+          path: dist/*.whl
       
       - name: Run pytest
         run: |
@@ -221,13 +224,13 @@ jobs:
 
       - name: Install Build Dependencies
         run: |
-          python -m pip install --upgrade pip setuptools wheel
+          python -m pip install --upgrade pip build wheel
 
       - name: Build Source Package
         id: build_source
         run: |
-          python setup.py sdist
-          pkg=$(ls dist/)
+          python -m build --sdist -o dist
+          pkg=$(basename "$(ls dist/*.tar.gz)")
           echo "Built Source package: $pkg"
           echo "pkg=$pkg" >> $GITHUB_ENV
 
@@ -235,7 +238,7 @@ jobs:
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f  # v6.0.0
         with:
           name: source-package
-          path: dist/${{ env.pkg }}
+          path: dist/*.tar.gz
 
       - name: Set up Docker Buildx
         id: buildx
@@ -300,7 +303,7 @@ jobs:
         shell: pwsh
         run: |
           $env:PATH="$env:pythonLocation;$env:PATH"
-          python -m pip install --upgrade pip setuptools wheel pytest
+          python -m pip install --upgrade pip build wheel pytest
         env:
           pythonLocation: ${{ env.pythonLocation }}
 
@@ -309,8 +312,8 @@ jobs:
         shell: pwsh
         run: |
           $env:PATH="$env:pythonLocation;$env:PATH"
-          python setup.py bdist_wheel
-          $pkg = (Get-ChildItem -Path dist | Select-Object -ExpandProperty Name)
+          python -m build --wheel -o dist
+          $pkg = (Get-ChildItem -Path dist -Filter *.whl | Select-Object -First 1 -ExpandProperty Name)
           Write-Output "Built Windows package: $pkg"
           echo "pkg=$pkg" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
         env:
@@ -321,13 +324,13 @@ jobs:
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f  # v6.0.0
         with:
           name: windows-package-${{ env.PYTHON_VERSION }}-on-${{ inputs.os-version != '' && inputs.os-version || 'windows-11-arm' }}
-          path: dist/${{ env.pkg }}
+          path: dist/*.whl
 
       - name: Run pytest
         shell: pwsh
         run: |
           $env:PATH="$env:pythonLocation;$env:PATH"
-          python -m pip install dist/${{ env.pkg }} pytest
+          python -m pip install dist/*.whl pytest
           cd tests  # so that it doesn't try to import the local directory
           python -m pytest .
         env:

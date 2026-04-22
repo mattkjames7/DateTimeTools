@@ -197,6 +197,7 @@ jobs:
       fail-fast: false
     with:
       python_version: ${{ matrix.python_version }}
+      arch: ${{ matrix.arch }}
 
   build_windows_msys2:
     needs: setup_inputs
@@ -207,4 +208,3 @@ jobs:
       fail-fast: false
     with:
       python_version: ${{ matrix.python_version }}
-      arch: ${{ matrix.arch }}

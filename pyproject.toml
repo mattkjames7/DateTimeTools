@@ -1,0 +1,41 @@
+[build-system]
+requires = ["scikit-build-core>=0.11"]
+build-backend = "scikit_build_core.build"
+
+[project]
+name = "DateTimeTools"
+version = "1.3.3"
+description = "A package containing some simple tools to manage dates and times."
+readme = "README.md"
+license = { text = "MIT" }
+authors = [
+  { name = "Matthew Knight James", email = "mattkjames7@gmail.com" },
+]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: POSIX",
+  "Operating System :: Microsoft :: Windows",
+  "Operating System :: MacOS",
+]
+dependencies = [
+  "numpy",
+  "scipy",
+  "cdflib",
+]
+
+[project.urls]
+Homepage = "https://github.com/mattkjames7/DateTimeTools"
+
+[tool.scikit-build]
+cmake.source-dir = "DateTimeTools/__data/datetime"
+wheel.packages = ["DateTimeTools"]
+
+[tool.scikit-build.cmake.define]
+BUILD_SHARED_LIBS = "ON"
+BUILD_STATIC_LIBS = "OFF"
+BUILD_TESTING = "OFF"
+DATETIME_INSTALL_LIBDIR = "DateTimeTools/__data/datetime/lib"
+DATETIME_INSTALL_BINDIR = "DateTimeTools/__data/datetime/lib"
+DATETIME_INSTALL_INCLUDEDIR = "DateTimeTools/__data/datetime/include"
+DATETIME_INSTALL_CMAKEDIR = "DateTimeTools/__data/datetime/lib/cmake/DateTime"

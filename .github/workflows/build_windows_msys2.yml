@@ -1,0 +1,90 @@
+name: Build Windows (MSYS2)
+
+on:
+  workflow_call:
+    inputs:
+      python_version:
+        type: string
+        description: "Python version to build package for"
+        default: "3.14"
+
+
+env:
+  PYTHON_VERSION: ${{ inputs.python_version }}
+
+jobs:
+  build_windows:
+    name: Build Windows Package (Python ${{ inputs.python_version }})
+    runs-on: windows-2025
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8  # v6.0.1
+        with:
+          submodules: recursive
+
+      - name: Set up MSYS2
+        uses: msys2/setup-msys2@e9898307ac31d1a803454791be09ab9973336e1c  # v2.31.1
+        with:
+          msystem: MINGW64
+          install: >
+            git
+            mingw-w64-x86_64-gcc
+            mingw-w64-x86_64-cmake
+            mingw-w64-x86_64-make
+      
+      - name: Add MSYS2 mingw64/bin to PATH
+        shell: msys2 {0}
+        run: |
+          echo "/mingw64/bin" >> $GITHUB_PATH
+          
+              
+      - name: Set up Windows Python
+        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405  # v6.2.0
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          architecture: x64
+
+      - name: Add Windows Python to PATH
+        shell: msys2 {0}
+        run: |
+          echo "$pythonLocation" >> $GITHUB_PATH
+        env:
+          pythonLocation: ${{ env.pythonLocation }}
+      
+
+      - name: Install Python build tools
+        shell: msys2 {0}
+        run: |
+          export PATH="$(cygpath -u "$pythonLocation"):$PATH"
+          python -m pip install --upgrade pip build wheel pytest
+        env:
+          pythonLocation: ${{ env.pythonLocation }}
+
+      - name: Build Windows Package
+        id: build_windows
+        shell: msys2 {0}
+        run: |
+          export PATH="$(cygpath -u "$pythonLocation"):$PATH"
+          python -m build --wheel -o dist
+          pkg=$(basename "$(ls dist/*.whl)")
+          echo "Built Windows package: $pkg"
+          echo "pkg=$pkg" >> $GITHUB_ENV
+        env:
+          pythonLocation: ${{ env.pythonLocation }}
+
+
+      - name: Upload Windows Package
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f  # v6.0.0
+        with:
+          name: windows-package-${{ env.PYTHON_VERSION }}-on-MSYS2-x86_64
+          path: dist/*.whl
+
+      - name: Run pytest
+        shell: msys2 {0}
+        run: |
+          export PATH="$(cygpath -u "$pythonLocation"):$PATH"
+          python -m pip install dist/$pkg pytest
+          cd tests  # so that it doesn't try to import the local directory
+          python -m pytest .
+        env:
+          pythonLocation: ${{ env.pythonLocation }}

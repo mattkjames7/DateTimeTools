@@ -7,14 +7,10 @@ on:
 run-name: Monthly Package and Test DateTimeTools
 jobs:
   package_and_test:
-    uses: ./.github/workflows/reusable_package_test.yml
-    strategy:
-        fail-fast: false
-        matrix:
-            python_version: ["3.10","3.11","3.12","3.13", "3.14"]
+    uses: ./.github/workflows/package_test.yml
     with:
-        python_version: "${{ matrix.python_version }}"
+        python_version: "3.14"
         linux: true
-        windows: false
-        macos: false
+        windows-msvc: true
+        macos: true
         source: false

@@ -4,7 +4,7 @@ A package containing some simple tools to manage dates and times.
 
 ## Installation
 
-Installation requires `cmake` to be intalled in order to build `libdatetime`. It may be installed via `apt`:
+Installation requires `cmake` to build `libdatetime` from source. It may be installed via `apt`:
 
 ```bash
 sudo apt install cmake
@@ -19,11 +19,8 @@ pip3 install cmake
 Install using `pip3`:
 
 ```bash
-# Linux
+# Linux/macOS/Windows
 pip3 install DateTimeTools
-
-# MacOS
-pip3 install DateTimeTools --no-build-isolation
 ```
 
 NOTE: This module uses a C++ backend, which is compiled with CMake - please install CMake for your OS before installing this package.

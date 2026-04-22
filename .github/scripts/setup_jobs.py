@@ -2,9 +2,12 @@ import json
 import argparse
 
 
-def _generate_jobs(arch, python_version):
+def _generate_jobs(arch, python_version, key=None):
     if python_version == "all":
-        python_versions = ["3.10", "3.11", "3.12", "3.13", "3.14"]
+        if "windows" in key and arch == "aarch64":
+            python_versions = ["3.11", "3.12", "3.13", "3.14"]
+        else:
+            python_versions = ["3.10", "3.11", "3.12", "3.13", "3.14"]
     else:
         python_versions = [python_version]
 
@@ -25,7 +28,7 @@ def _as_bool(value):
 
 def _extend_jobs(jobs, key, arch, python_version):
     jobs.setdefault(key, [])
-    jobs[key].extend(_generate_jobs(arch, python_version))
+    jobs[key].extend(_generate_jobs(arch, python_version, key))
 
 
 def main():
@@ -33,7 +36,6 @@ def main():
     parser.add_argument("--event_type", type=str, required=True, help="GitHub event type (e.g., push, pull_request)")
     parser.add_argument("--python-version", type=str, default="3.14", help="Python version to build packages for")
     parser.add_argument("--windows-x86", default=False, help="Whether to build Windows packages for x86_64")
-    parser.add_argument("--windows-arm", default=False, help="Whether to build Windows packages for aarch64")
     parser.add_argument(
         "--windows-x86-msvc",
         default=False,
@@ -66,8 +68,7 @@ def main():
                 {"python_version": "3.14", "arch": "aarch64"}
             ],
             "windows-msys2": [
-                {"python_version": "3.14", "arch": "x86_64"},
-                {"python_version": "3.14", "arch": "aarch64"}
+                {"python_version": "3.14"},
             ],
             "macos": [
                 {"python_version": "3.14", "arch": "x86_64"},
@@ -80,8 +81,6 @@ def main():
     else:
         if _as_bool(args.windows_x86):
             _extend_jobs(jobs, "windows-msys2", "x86_64", args.python_version)
-        if _as_bool(args.windows_arm):
-            _extend_jobs(jobs, "windows-msys2", "aarch64", args.python_version)
         if _as_bool(args.windows_x86_msvc):
             _extend_jobs(jobs, "windows-msvc", "x86_64", args.python_version)
         if _as_bool(args.windows_arm_msvc):

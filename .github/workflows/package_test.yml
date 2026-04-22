@@ -27,10 +27,6 @@ on:
         type: boolean
         description: "Build Windows package (x86_64, MSYS2)"
         default: false
-      windows-arm:
-        type: boolean
-        description: "Build Windows package (aarch64, MSYS2)"
-        default: false
       windows-msvc:
         type: boolean
         description: "Build Windows package (x86_64, MSVC)"
@@ -68,10 +64,6 @@ on:
       windows:
         type: boolean
         description: "Build Windows package (x86_64, MSYS2)"
-        default: false
-      windows-arm:
-        type: boolean
-        description: "Build Windows package (aarch64, MSYS2)"
         default: false
       windows-msvc:
         type: boolean
@@ -121,7 +113,6 @@ jobs:
           EVENT_TYPE: ${{ github.event_name }}
           PYTHON_VERSION: ${{ inputs.python_version || '3.14' }}
           WINDOWS_X86: ${{ inputs.windows || false }}
-          WINDOWS_ARM: ${{ inputs.windows-arm || false }}
           WINDOWS_X86_MSVC: ${{ inputs.windows-msvc || false }}
           WINDOWS_ARM_MSVC: ${{ inputs.windows-msvc-arm || false }}
           LINUX_X86: ${{ inputs.linux || false }}
@@ -134,7 +125,6 @@ jobs:
             --event_type "$EVENT_TYPE" \
             --python-version "$PYTHON_VERSION" \
             --windows-x86 "$WINDOWS_X86" \
-            --windows-arm "$WINDOWS_ARM" \
             --windows-x86-msvc "$WINDOWS_X86_MSVC" \
             --windows-arm-msvc "$WINDOWS_ARM_MSVC" \
             --linux-x86 "$LINUX_X86" \
@@ -207,7 +197,6 @@ jobs:
       fail-fast: false
     with:
       python_version: ${{ matrix.python_version }}
-      arch: ${{ matrix.arch }}
 
   build_windows_msys2:
     needs: setup_inputs

@@ -2,7 +2,7 @@ import json
 import argparse
 
 
-def _generate_jobs(arch, python_version, key=None):
+def _generate_jobs(arch, python_version, key=""):
     if python_version == "all":
         if "windows" in key and arch == "aarch64":
             python_versions = ["3.11", "3.12", "3.13", "3.14"]

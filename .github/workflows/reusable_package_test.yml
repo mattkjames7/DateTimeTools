@@ -324,13 +324,13 @@ jobs:
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f  # v6.0.0
         with:
           name: windows-package-${{ env.PYTHON_VERSION }}-on-${{ inputs.os-version != '' && inputs.os-version || 'windows-11-arm' }}
-          path: dist/*.whl
+          path: dist/${{ env.pkg }}
 
       - name: Run pytest
         shell: pwsh
         run: |
           $env:PATH="$env:pythonLocation;$env:PATH"
-          python -m pip install dist/*.whl pytest
+          python -m pip install dist/${{ env.pkg }} pytest
           cd tests  # so that it doesn't try to import the local directory
           python -m pytest .
         env:

@@ -94,7 +94,7 @@ def main():
         if _as_bool(args.macos_arm):
             _extend_jobs(jobs, "macos", "aarch64", args.python_version)
         if _as_bool(args.source):
-            jobs["source"] = {"python_version": args.python_version}
+            jobs["source"] = [{"python_version": args.python_version}]
 
     # Output the jobs as JSON
     print(json.dumps(jobs, indent=4))

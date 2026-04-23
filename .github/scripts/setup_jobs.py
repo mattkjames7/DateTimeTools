@@ -55,7 +55,7 @@ def main():
     args = parser.parse_args()
 
     # Define the jobs based on user input
-    jobs = {}
+    jobs = {key: [] for key in ["linux", "windows-msvc", "windows-msys2", "macos", "source"]}
 
     if args.event_type == "pull_request":
         jobs = {
@@ -94,7 +94,7 @@ def main():
         if _as_bool(args.macos_arm):
             _extend_jobs(jobs, "macos", "aarch64", args.python_version)
         if _as_bool(args.source):
-            jobs["source"] = {"python_version": args.python_version}
+            jobs["source"] = [{"python_version": args.python_version if args.python_version != "all" else "3.14"}]
 
     # Output the jobs as JSON
     print(json.dumps(jobs, indent=4))

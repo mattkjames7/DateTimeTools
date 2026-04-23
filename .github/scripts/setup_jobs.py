@@ -55,7 +55,7 @@ def main():
     args = parser.parse_args()
 
     # Define the jobs based on user input
-    jobs = {}
+    jobs = {key: [] for key in ["linux", "windows-msvc", "windows-msys2", "macos", "source"]}
 
     if args.event_type == "pull_request":
         jobs = {
